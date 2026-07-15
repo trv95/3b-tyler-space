@@ -1,0 +1,3 @@
+color = "teal"
+links = ["Databricks Logs"]
+apps = [{ name = "virustotal-rami-tyan-test", type = "virusTotal" }]

@@ -1,0 +1,3 @@
+color = "purple"
+links = ["Create Tines Case"]
+apps = [{ name = "anthropic-se-demos-please-only-use-this-one", type = "anthropic" }]
