@@ -1,0 +1,5 @@
+color = "sky"
+route = "/vulndata/enrich"
+route_auth = "connector"
+route_type = "api"
+output = true

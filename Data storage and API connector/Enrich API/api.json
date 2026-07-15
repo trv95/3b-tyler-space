@@ -1,0 +1,32 @@
+{
+  "get": {
+    "summary": "Cross-dataset enrichment lookup",
+    "description": "Given one or more lookup keys, returns a joined view across owners, Qualys, Security Central, and BugDB. Provide at least one of service, ownerEmail, bug, cve, qid. cve is substring match; others are exact. BugDB records are matched by the supplied keys and by any bug IDs discovered in the Qualys/Security Central results for the same key.",
+    "parameters": [
+      {"name":"service","in":"query","schema":{"type":"string"}},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
+      {"name":"bug","in":"query","schema":{"type":"string"}},
+      {"name":"cve","in":"query","schema":{"type":"string"},"description":"Substring match"},
+      {"name":"qid","in":"query","schema":{"type":"string"}}
+    ],
+    "responses": {
+      "200": {
+        "description": "Joined enrichment view",
+        "content": {"application/json": {"schema": {
+          "type":"object",
+          "properties":{
+            "query":{"type":"object"},
+            "owners":{"type":"array","items":{"type":"object"}},
+            "qualys":{"type":"array","items":{"type":"object"}},
+            "securityCentral":{"type":"array","items":{"type":"object"}},
+            "bugdb":{"type":"array","items":{"type":"object"}}
+          }
+        }}}
+      },
+      "400": {
+        "description": "No lookup key supplied",
+        "content": {"application/json": {"schema": {"type":"object","properties":{"error":{"type":"string"}}}}}
+      }
+    }
+  }
+}

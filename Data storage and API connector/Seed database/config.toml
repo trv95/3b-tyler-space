@@ -1,0 +1,5 @@
+color = "purple"
+route = "/vulndata-seed"
+route_auth = "space"
+route_type = "other"
+output = true

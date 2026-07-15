@@ -1,0 +1,40 @@
+{
+  "get": {
+    "summary": "List BugDB tickets",
+    "description": "Returns BugDB mock tickets. All query params are optional filters; bug/priority/risk/status/product/component/ownerEmail/source/sourceFinding/securityCentral are exact match, cve and subject are substring (LIKE) match.",
+    "parameters": [
+      {"name":"bug","in":"query","schema":{"type":"string"}},
+      {"name":"priority","in":"query","schema":{"type":"string"}},
+      {"name":"risk","in":"query","schema":{"type":"string"}},
+      {"name":"status","in":"query","schema":{"type":"string"}},
+      {"name":"product","in":"query","schema":{"type":"string"}},
+      {"name":"component","in":"query","schema":{"type":"string"}},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
+      {"name":"source","in":"query","schema":{"type":"string"}},
+      {"name":"sourceFinding","in":"query","schema":{"type":"string"}},
+      {"name":"securityCentral","in":"query","schema":{"type":"string"}},
+      {"name":"cve","in":"query","schema":{"type":"string"},"description":"Substring match"},
+      {"name":"subject","in":"query","schema":{"type":"string"},"description":"Substring match"},
+      {"name":"limit","in":"query","schema":{"type":"integer","default":100,"maximum":500}}
+    ],
+    "responses": {
+      "200": {
+        "description": "Matching BugDB tickets",
+        "content": {"application/json": {"schema": {
+          "type":"object",
+          "properties":{
+            "count":{"type":"integer"},
+            "records":{"type":"array","items":{"type":"object","properties":{
+              "bug":{"type":"string"},"priority":{"type":"string"},"risk":{"type":"string"},
+              "severity":{"type":"integer"},"status":{"type":"string"},"subject":{"type":"string"},
+              "product":{"type":"string"},"component":{"type":"string"},"owner":{"type":"string"},
+              "ownerEmail":{"type":"string"},"slack":{"type":"string"},"source":{"type":"string"},
+              "sourceFinding":{"type":"string"},"securityCentral":{"type":"string"},
+              "cve":{"type":"string"},"remediation":{"type":"string"}
+            }}}
+          }
+        }}}
+      }
+    }
+  }
+}

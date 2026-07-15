@@ -1,0 +1,37 @@
+{
+  "get": {
+    "summary": "List Security Central findings",
+    "description": "Returns Security Central finding records. All query params are optional filters; service/ownerEmail/severity/status/qid/bug/securityCentralId/resource/region are exact match, cve and summary are substring (LIKE) match.",
+    "parameters": [
+      {"name":"service","in":"query","schema":{"type":"string"}},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
+      {"name":"severity","in":"query","schema":{"type":"string"},"description":"HIGH, MEDIUM, NEEDS REVIEW"},
+      {"name":"status","in":"query","schema":{"type":"string"}},
+      {"name":"qid","in":"query","schema":{"type":"string"}},
+      {"name":"bug","in":"query","schema":{"type":"string"}},
+      {"name":"securityCentralId","in":"query","schema":{"type":"string"}},
+      {"name":"resource","in":"query","schema":{"type":"string"}},
+      {"name":"region","in":"query","schema":{"type":"string"}},
+      {"name":"cve","in":"query","schema":{"type":"string"},"description":"Substring match"},
+      {"name":"summary","in":"query","schema":{"type":"string"},"description":"Substring match"},
+      {"name":"limit","in":"query","schema":{"type":"integer","default":100,"maximum":500}}
+    ],
+    "responses": {
+      "200": {
+        "description": "Matching Security Central findings",
+        "content": {"application/json": {"schema": {
+          "type":"object",
+          "properties":{
+            "count":{"type":"integer"},
+            "records":{"type":"array","items":{"type":"object","properties":{
+              "securityCentralId":{"type":"string"},"severity":{"type":"string"},"status":{"type":"string"},
+              "summary":{"type":"string"},"qid":{"type":"string"},"cve":{"type":"string"},
+              "resource":{"type":"string"},"service":{"type":"string"},"ownerEmail":{"type":"string"},
+              "bug":{"type":"string"},"region":{"type":"string"},"reported":{"type":"string"}
+            }}}
+          }
+        }}}
+      }
+    }
+  }
+}

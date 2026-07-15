@@ -1,0 +1,5 @@
+color = "red"
+route = "/vulndata/qualys"
+route_auth = "connector"
+route_type = "api"
+output = true

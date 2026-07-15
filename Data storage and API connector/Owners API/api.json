@@ -1,0 +1,30 @@
+{
+  "get": {
+    "summary": "List service owners and routing",
+    "description": "Returns service-ownership and ticket-routing records. All query params are optional filters (exact match).",
+    "parameters": [
+      {"name":"service","in":"query","schema":{"type":"string"},"description":"Service key, e.g. atlaspay-checkout-uat"},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
+      {"name":"target","in":"query","schema":{"type":"string"},"description":"Ticketing target (BugDB, Jira, Enterprise Jira)"},
+      {"name":"application","in":"query","schema":{"type":"string"}},
+      {"name":"project","in":"query","schema":{"type":"string"}},
+      {"name":"limit","in":"query","schema":{"type":"integer","default":100,"maximum":500}}
+    ],
+    "responses": {
+      "200": {
+        "description": "Matching owner records",
+        "content": {"application/json": {"schema": {
+          "type":"object",
+          "properties":{
+            "count":{"type":"integer"},
+            "records":{"type":"array","items":{"type":"object","properties":{
+              "application":{"type":"string"},"service":{"type":"string"},"owner":{"type":"string"},
+              "ownerEmail":{"type":"string"},"spoc":{"type":"string"},"spocEmail":{"type":"string"},
+              "target":{"type":"string"},"project":{"type":"string"},"slack":{"type":"string"},"component":{"type":"string"}
+            }}}
+          }
+        }}}
+      }
+    }
+  }
+}

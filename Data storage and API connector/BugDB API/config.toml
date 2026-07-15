@@ -1,0 +1,5 @@
+color = "teal"
+route = "/vulndata/bugdb"
+route_auth = "connector"
+route_type = "api"
+output = true
