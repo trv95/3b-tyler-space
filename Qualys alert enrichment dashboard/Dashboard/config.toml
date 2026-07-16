@@ -1,0 +1,4 @@
+color = "purple"
+route = "/vuln-report"
+route_type = "webpage"
+output = true

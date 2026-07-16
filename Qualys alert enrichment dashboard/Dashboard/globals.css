@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "./*.tsx";
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+
+html { -webkit-font-smoothing: antialiased; }
+::selection { background: #f0b429; color: #0a0c10; }
+
+/* thin scrollbar */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: #0a0c10; }
+*::-webkit-scrollbar-thumb { background: #23303f; border: 2px solid #0a0c10; }
+*::-webkit-scrollbar-thumb:hover { background: #33475b; }
