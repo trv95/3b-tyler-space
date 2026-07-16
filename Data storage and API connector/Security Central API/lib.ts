@@ -39,9 +39,22 @@ export function openDb(readonly = true): Database {
   return new Database(DB_PATH, readonly ? { readonly: true } : { readwrite: true });
 }
 
+/** Collect all values for a filter: repeated params (?a=1&a=2) and comma-separated (?a=1,2). */
+function multiValues(q: URLSearchParams, field: string): string[] {
+  const out: string[] = [];
+  for (const raw of q.getAll(field)) {
+    for (const part of raw.split(",")) {
+      const v = part.trim();
+      if (v !== "") out.push(v);
+    }
+  }
+  return out;
+}
+
 /**
  * Build a WHERE clause from allowed filters.
- * exact filters match with =, like filters match with LIKE %..%.
+ * exact filters match a single value with =, or multiple values (repeated
+ * param or comma-separated) with IN (...). like filters match with LIKE %..%.
  */
 export function buildQuery(
   q: URLSearchParams,
@@ -51,10 +64,13 @@ export function buildQuery(
   const clauses: string[] = [];
   const params: any[] = [];
   for (const f of exact) {
-    const v = q.get(f);
-    if (v !== null && v !== "") {
+    const vals = multiValues(q, f);
+    if (vals.length === 1) {
       clauses.push(`${f} = ?`);
-      params.push(v);
+      params.push(vals[0]);
+    } else if (vals.length > 1) {
+      clauses.push(`${f} IN (${vals.map(() => "?").join(", ")})`);
+      params.push(...vals);
     }
   }
   for (const f of like) {

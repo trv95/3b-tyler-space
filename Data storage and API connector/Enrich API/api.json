@@ -1,13 +1,13 @@
 {
   "get": {
     "summary": "Cross-dataset enrichment lookup",
-    "description": "Given one or more lookup keys, returns a joined view across owners, Qualys, Security Central, and BugDB. Provide at least one of service, ownerEmail, bug, cve, qid. cve is substring match; others are exact. BugDB records are matched by the supplied keys and by any bug IDs discovered in the Qualys/Security Central results for the same key.",
+    "description": "Given one or more lookup keys, returns a joined view across owners, Qualys, Security Central, and BugDB. Provide at least one of service, ownerEmail, bug, cve, qid. Each key accepts multiple values — repeat the param (?service=a&service=b) or pass a comma-separated list (?service=a,b) — so you can enrich a whole batch in one request instead of one at a time. cve is substring match (matches any supplied value); others are exact IN (...) matches. BugDB records are matched by the supplied keys and by any bug IDs discovered in the Qualys/Security Central results. The `query` field echoes each key back as an array of the supplied values.",
     "parameters": [
-      {"name":"service","in":"query","schema":{"type":"string"}},
-      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
-      {"name":"bug","in":"query","schema":{"type":"string"}},
-      {"name":"cve","in":"query","schema":{"type":"string"},"description":"Substring match"},
-      {"name":"qid","in":"query","schema":{"type":"string"}}
+      {"name":"service","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated for batch lookup."},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."},
+      {"name":"bug","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."},
+      {"name":"cve","in":"query","schema":{"type":"string"},"description":"Substring match. Repeatable / comma-separated."},
+      {"name":"qid","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."}
     ],
     "responses": {
       "200": {

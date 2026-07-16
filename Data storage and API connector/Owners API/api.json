@@ -1,13 +1,13 @@
 {
   "get": {
     "summary": "List service owners and routing",
-    "description": "Returns service-ownership and ticket-routing records. All query params are optional filters (exact match).",
+    "description": "Returns service-ownership and ticket-routing records. All query params are optional exact-match filters. Each filter accepts multiple values — repeat the param (?service=a&service=b) or pass a comma-separated list (?service=a,b), matched with IN (...) — so you can fetch many records in one request instead of querying one at a time.",
     "parameters": [
-      {"name":"service","in":"query","schema":{"type":"string"},"description":"Service key, e.g. atlaspay-checkout-uat"},
-      {"name":"ownerEmail","in":"query","schema":{"type":"string"}},
-      {"name":"target","in":"query","schema":{"type":"string"},"description":"Ticketing target (BugDB, Jira, Enterprise Jira)"},
-      {"name":"application","in":"query","schema":{"type":"string"}},
-      {"name":"project","in":"query","schema":{"type":"string"}},
+      {"name":"service","in":"query","schema":{"type":"string"},"description":"Service key, e.g. atlaspay-checkout-uat. Repeatable / comma-separated for batch lookup."},
+      {"name":"ownerEmail","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."},
+      {"name":"target","in":"query","schema":{"type":"string"},"description":"Ticketing target (BugDB, Jira, Enterprise Jira). Repeatable / comma-separated."},
+      {"name":"application","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."},
+      {"name":"project","in":"query","schema":{"type":"string"},"description":"Repeatable / comma-separated."},
       {"name":"limit","in":"query","schema":{"type":"integer","default":100,"maximum":500}}
     ],
     "responses": {

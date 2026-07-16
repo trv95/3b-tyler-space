@@ -1,20 +1,34 @@
 import { readRequest, json, openDb } from "./lib";
 
-// Enrichment endpoint: given a lookup key, return a joined view of everything
-// known about it across all four datasets. Accepts (in priority order):
+// Enrichment endpoint: given one or more lookup keys, return a joined view of
+// everything known about them across all four datasets. Each key accepts
+// multiple values — repeated params (?service=a&service=b) and/or
+// comma-separated (?service=a,b) — so callers can enrich a whole batch in one
+// request instead of querying one at a time. Keys:
 //   ?service=  ?ownerEmail=  ?bug=  ?cve=  ?qid=
 const req = await readRequest();
 const db = openDb();
 
-const keys = {
-  service: req.query.get("service"),
-  ownerEmail: req.query.get("ownerEmail"),
-  bug: req.query.get("bug"),
-  cve: req.query.get("cve"),
-  qid: req.query.get("qid"),
+const multi = (field: string): string[] => {
+  const out: string[] = [];
+  for (const raw of req.query.getAll(field)) {
+    for (const part of raw.split(",")) {
+      const v = part.trim();
+      if (v !== "") out.push(v);
+    }
+  }
+  return out;
 };
 
-if (!Object.values(keys).some(Boolean)) {
+const keys = {
+  service: multi("service"),
+  ownerEmail: multi("ownerEmail"),
+  bug: multi("bug"),
+  cve: multi("cve"),
+  qid: multi("qid"),
+};
+
+if (!Object.values(keys).some((v) => v.length > 0)) {
   db.close();
   json({ error: "Provide at least one of: service, ownerEmail, bug, cve, qid" }, 400);
 } else {
@@ -30,14 +44,18 @@ if (!Object.values(keys).some(Boolean)) {
     const clauses: string[] = [];
     const params: any[] = [];
     for (const col of COLS[table]) {
-      const val = (keys as any)[col];
-      if (!val) continue;
+      const vals: string[] = (keys as any)[col];
+      if (!vals || vals.length === 0) continue;
       if (col === "cve") {
-        clauses.push("cve LIKE ?");
-        params.push(`%${val}%`);
-      } else {
+        // Substring match, any of the supplied CVEs.
+        clauses.push(`(${vals.map(() => "cve LIKE ?").join(" OR ")})`);
+        params.push(...vals.map((v) => `%${v}%`));
+      } else if (vals.length === 1) {
         clauses.push(`${col} = ?`);
-        params.push(val);
+        params.push(vals[0]);
+      } else {
+        clauses.push(`${col} IN (${vals.map(() => "?").join(", ")})`);
+        params.push(...vals);
       }
     }
     // Let bugdb be reachable via bugs discovered from service/owner scans.
