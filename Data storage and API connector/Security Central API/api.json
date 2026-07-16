@@ -33,5 +33,36 @@
         }}}
       }
     }
+  },
+  "post": {
+    "summary": "Insert or update Security Central findings (upsert)",
+    "description": "Upserts Security Central findings keyed on `securityCentralId`. If a row with the same `securityCentralId` exists it is updated (only the provided columns change), otherwise a new row is inserted. Accepts a single record object or {\"records\":[...]} for batch. Unknown fields are ignored; each record must include a non-empty `securityCentralId`.",
+    "requestBody": {
+      "required": true,
+      "content": {"application/json": {"schema": {
+        "oneOf": [
+          {"$comment":"single record","type":"object","required":["securityCentralId"],"properties":{
+            "securityCentralId":{"type":"string"},"severity":{"type":"string"},"status":{"type":"string"},
+            "summary":{"type":"string"},"qid":{"type":"string"},"cve":{"type":"string"},
+            "resource":{"type":"string"},"service":{"type":"string"},"ownerEmail":{"type":"string"},
+            "bug":{"type":"string"},"region":{"type":"string"},"reported":{"type":"string"}
+          }},
+          {"$comment":"batch","type":"object","required":["records"],"properties":{"records":{"type":"array","items":{
+            "type":"object","required":["securityCentralId"],"properties":{
+              "securityCentralId":{"type":"string"},"severity":{"type":"string"},"status":{"type":"string"},
+              "summary":{"type":"string"},"qid":{"type":"string"},"cve":{"type":"string"},
+              "resource":{"type":"string"},"service":{"type":"string"},"ownerEmail":{"type":"string"},
+              "bug":{"type":"string"},"region":{"type":"string"},"reported":{"type":"string"}
+            }}}}}
+        ]
+      }}}
+    },
+    "responses": {
+      "200": {"description":"Upsert result","content":{"application/json":{"schema":{"type":"object","properties":{
+        "ok":{"type":"boolean"},"inserted":{"type":"integer"},"updated":{"type":"integer"},
+        "keys":{"type":"array","items":{"type":"string"}}}}}}},
+      "400": {"description":"Invalid body or missing key","content":{"application/json":{"schema":{"type":"object","properties":{
+        "ok":{"type":"boolean"},"error":{"type":"string"}}}}}}
+    }
   }
 }

@@ -26,5 +26,34 @@
         }}}
       }
     }
+  },
+  "post": {
+    "summary": "Insert or update owner records (upsert)",
+    "description": "Upserts owner records keyed on `service`. If a row with the same `service` exists it is updated (only the provided columns change), otherwise a new row is inserted. Accepts a single record object or {\"records\":[...]} for batch. Unknown fields are ignored; each record must include a non-empty `service`.",
+    "requestBody": {
+      "required": true,
+      "content": {"application/json": {"schema": {
+        "oneOf": [
+          {"$comment":"single record","type":"object","required":["service"],"properties":{
+            "application":{"type":"string"},"service":{"type":"string"},"owner":{"type":"string"},
+            "ownerEmail":{"type":"string"},"spoc":{"type":"string"},"spocEmail":{"type":"string"},
+            "target":{"type":"string"},"project":{"type":"string"},"slack":{"type":"string"},"component":{"type":"string"}
+          }},
+          {"$comment":"batch","type":"object","required":["records"],"properties":{"records":{"type":"array","items":{
+            "type":"object","required":["service"],"properties":{
+              "application":{"type":"string"},"service":{"type":"string"},"owner":{"type":"string"},
+              "ownerEmail":{"type":"string"},"spoc":{"type":"string"},"spocEmail":{"type":"string"},
+              "target":{"type":"string"},"project":{"type":"string"},"slack":{"type":"string"},"component":{"type":"string"}
+            }}}}}
+        ]
+      }}}
+    },
+    "responses": {
+      "200": {"description":"Upsert result","content":{"application/json":{"schema":{"type":"object","properties":{
+        "ok":{"type":"boolean"},"inserted":{"type":"integer"},"updated":{"type":"integer"},
+        "keys":{"type":"array","items":{"type":"string"}}}}}}},
+      "400": {"description":"Invalid body or missing key","content":{"application/json":{"schema":{"type":"object","properties":{
+        "ok":{"type":"boolean"},"error":{"type":"string"}}}}}}
+    }
   }
 }

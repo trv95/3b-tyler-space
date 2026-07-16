@@ -21,4 +21,4 @@ RUN \
 
 CMD ./bun ./script.ts
 
-VOLUME ["vulndata:ro"]
+VOLUME ["vulndata:concurrency=exclusive"]
