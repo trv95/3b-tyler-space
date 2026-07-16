@@ -1,5 +1,5 @@
 color = "green"
 route = "/vulndata/owners"
-route_auth = "tenant"
+route_auth = "connector"
 route_type = "api"
 output = true
