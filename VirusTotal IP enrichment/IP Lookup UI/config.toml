@@ -1,0 +1,4 @@
+color = "sky"
+output = true
+route = "/ip-lookup"
+route_type = "webpage"

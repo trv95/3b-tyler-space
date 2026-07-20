@@ -1,0 +1,23 @@
+{
+  "post": {
+    "summary": "Enrich an IP address via VirusTotal",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["ip"],
+            "properties": { "ip": { "type": "string", "description": "IPv4 or IPv6 address" } }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": { "description": "Enrichment summary", "content": { "application/json": { "schema": { "type": "object" } } } },
+      "400": { "description": "Invalid or missing IP" },
+      "404": { "description": "IP not found in VirusTotal" },
+      "502": { "description": "Upstream or auth error" }
+    }
+  }
+}

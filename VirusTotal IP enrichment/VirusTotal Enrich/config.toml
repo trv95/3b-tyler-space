@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/vt-enrich"
+route_auth = "space"
+route_type = "api"
+apps = [{ name = "virustotal-rami-tyan-test", type = "virusTotal" }]
