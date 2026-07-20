@@ -1,0 +1,3 @@
+color = "green"
+output = true
+apps = [{ name = "tyler-tines-stories", type = "tines" }]

@@ -1,0 +1,4 @@
+color = "orange"
+route = "/crowdstrike-sample"
+route_type = "api"
+links = ["VirusTotal enrichment"]

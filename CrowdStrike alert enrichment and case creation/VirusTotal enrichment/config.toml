@@ -1,0 +1,3 @@
+color = "sky"
+links = ["Create Tines case"]
+apps = [{ name = "virustotal-rami-tyan-test", type = "virusTotal" }]
