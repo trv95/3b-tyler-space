@@ -1,0 +1,74 @@
+{
+  "post": {
+    "summary": "Submit a budget, capex, or headcount approval request",
+    "description": "Creates a Tines case for the request and triggers a Slack approval notification.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["kind", "fields"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["budget", "capex", "headcount"],
+                "description": "The type of approval request."
+              },
+              "fields": {
+                "type": "object",
+                "description": "Form field values. Common keys apply to all types; additional keys depend on kind.",
+                "required": [
+                  "title",
+                  "requester_name",
+                  "requester_email",
+                  "amount",
+                  "needed_by",
+                  "priority",
+                  "justification"
+                ],
+                "properties": {
+                  "title": { "type": "string" },
+                  "requester_name": { "type": "string" },
+                  "requester_email": { "type": "string", "format": "email" },
+                  "amount": { "type": "string", "description": "Numeric amount as a string." },
+                  "needed_by": { "type": "string", "format": "date" },
+                  "priority": { "type": "string", "enum": ["Critical", "High", "Medium", "Low"] },
+                  "justification": { "type": "string" }
+                },
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Case created and notification triggered.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "caseId": { "type": ["integer", "string"] },
+                "caseUrl": { "type": "string", "format": "uri" }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Invalid or incomplete request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "error": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

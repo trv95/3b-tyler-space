@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "./*.tsx";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-paper: #f4efe6;
+  --color-ink: #1c1a17;
+  --color-oxblood: #7c2d2d;
+}
+
+html {
+  background-color: #e7e0d3;
+}
+
+::selection {
+  background: #1c1a17;
+  color: #f4efe6;
+}

@@ -1,0 +1,8 @@
+color = "teal"
+output = true
+route = "/budget-approvals/submit"
+route_auth = "space"
+route_type = "api"
+links = ["Notify Slack"]
+apps = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 60
