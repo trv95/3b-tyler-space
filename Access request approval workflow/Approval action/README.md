@@ -1,0 +1,1 @@
+Webhook at `/access-request-action` (unguessable `external_id` URL) — set this as the Slack app's Interactivity Request URL. Slack delivers button clicks here as a form-encoded `payload`. The step parses the decision, adds a comment to the Tines case and closes it on approval (Cases API), then responds with a replacement Slack message showing who decided and the outcome.

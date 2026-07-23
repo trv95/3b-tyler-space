@@ -1,0 +1,7 @@
+color = "sky"
+output = true
+route = "/access-request-submit"
+route_auth = "space"
+route_type = "api"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }, { name = "tyler-slack", type = "slack" }]
+timeout = 60

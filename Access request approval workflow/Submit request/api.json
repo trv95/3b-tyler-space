@@ -1,0 +1,45 @@
+{
+  "post": {
+    "summary": "Submit an access request",
+    "description": "Creates a Tines case documenting the request and posts an interactive approval message to Slack.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["name", "email", "reason"],
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" },
+              "system": { "type": "string" },
+              "level": { "type": "string" },
+              "duration": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Request accepted; case created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ok": { "type": "boolean" },
+                "case_id": { "type": "integer" },
+                "case_url": { "type": "string" },
+                "slack_error": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "Missing or invalid fields" },
+      "502": { "description": "Failed to create the case" }
+    }
+  }
+}

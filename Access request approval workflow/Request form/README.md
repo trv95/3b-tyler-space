@@ -1,0 +1,1 @@
+Access request form served at `/access-request` (space-authenticated). Collects requester name & email, the system/resource, access level, duration, and justification, then POSTs the values as JSON to the [Submit request](<../Submit request/script.ts>) endpoint at `/access-request-submit`. On success it shows a confirmation with the created case link.

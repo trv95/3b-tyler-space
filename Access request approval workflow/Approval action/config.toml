@@ -1,0 +1,7 @@
+color = "green"
+output = true
+route = "/access-request-action"
+route_auth = "external_id:UkJetAR57brF4FXPGtJYa"
+route_type = "webhook"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }, { name = "tyler-slack", type = "slack" }]
+timeout = 60
