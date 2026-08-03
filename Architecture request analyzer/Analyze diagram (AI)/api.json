@@ -1,0 +1,43 @@
+{
+  "post": {
+    "summary": "Analyze an architecture diagram image and return a review",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["image"],
+            "properties": {
+              "image": { "type": "string", "description": "Data URI or bare base64 of the diagram image" },
+              "mediaType": { "type": "string", "description": "Image MIME type, e.g. image/png" },
+              "filename": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Review produced",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "review": { "type": "string" } },
+              "required": ["review"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Invalid request",
+        "content": {
+          "application/json": {
+            "schema": { "type": "object", "properties": { "error": { "type": "string" } } }
+          }
+        }
+      }
+    }
+  }
+}

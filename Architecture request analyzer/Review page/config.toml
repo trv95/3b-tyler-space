@@ -1,0 +1,4 @@
+color = "sky"
+output = true
+route = "/architecture-review"
+route_type = "webpage"

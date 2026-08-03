@@ -1,0 +1,7 @@
+{
+  "name": "analyze-diagram",
+  "dependencies": {
+    "ai": "^5.0.26",
+    "@ai-sdk/anthropic": "^2.0.9"
+  }
+}
