@@ -75,11 +75,13 @@ const timestamp = when.toISOString().replace("T", " ").replace(/\.\d+Z$/, " UTC"
 
 const pluralise = (n: number, singular: string, plural = `${singular}s`) => `${n} ${n === 1 ? singular : plural}`;
 
-let comment: string;
+let noteTitle: string;
+let noteColor: string;
+let noteContent: string;
 if (action === "block-sender") {
-  comment = [
-    "### Sender blocked",
-    "",
+  noteTitle = "Sender blocked";
+  noteColor = "red";
+  noteContent = [
     `\`${sender}\` has been added to the tenant-wide block list, so future mail from this address will be rejected at the gateway.`,
     "",
     `- **Blocked by:** ${clickedBy}`,
@@ -93,9 +95,9 @@ if (action === "block-sender") {
   const inboxes = 3 + (seed % 26);
   const opened = seed % 5;
   const clicked = opened === 0 ? 0 : seed % 3;
-  comment = [
-    "### Message removed from all inboxes",
-    "",
+  noteTitle = "Message removed from all inboxes";
+  noteColor = "gold";
+  noteContent = [
     `A tenant-wide search for \`${subject}\` from \`${sender}\` returned **${pluralise(inboxes, "additional mailbox", "additional mailboxes")}** holding a copy of the message.`,
     "",
     `- **Copies found:** ${inboxes} mailboxes (${pluralise(opened, "recipient")} opened it, ${pluralise(clicked, "recipient")} clicked a link)`,
@@ -109,7 +111,10 @@ if (action === "block-sender") {
   ].join("\n");
 }
 
-await tines(`/cases/${caseId}/comments`, { method: "POST", body: JSON.stringify({ value: comment }) });
+await tines(`/cases/${caseId}/notes`, {
+  method: "POST",
+  body: JSON.stringify({ title: noteTitle, content: noteContent, color: noteColor }),
+});
 
 const payload = JSON.stringify({ case_id: Number(caseId), action, case_action_id: Number(caseActionId), performed_by: clickedBy });
 console.error(`Handled case action "${action}" on case ${caseId}`);
