@@ -1,0 +1,7 @@
+color = "orange"
+output = true
+route = "/phishing-case-action"
+route_auth = "external_id:b7rCawsYpcHuGY9oe4iLw"
+route_type = "webhook"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 60

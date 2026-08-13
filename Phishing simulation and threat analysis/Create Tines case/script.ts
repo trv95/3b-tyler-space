@@ -1,4 +1,5 @@
 const TEAM_ID = 107557;
+const HANDLER_EXTERNAL_ID = "b7rCawsYpcHuGY9oe4iLw";
 
 const payload = JSON.parse(await Bun.stdin.text());
 const { email, iocs, virustotal, analysis } = payload;
@@ -196,6 +197,45 @@ if (!response.ok) {
 
 const created = await response.json();
 console.error(`Created Tines case ${created.case_id} (${priority}) — ${created.url}`);
+
+const branch = process.env._3B_BRANCH_ID ?? "";
+const handlerUrl = `https://tyler-space.se-demo.3b.run/phishing-case-action?external_id=${HANDLER_EXTERNAL_ID}${branch ? `&branch=${branch}` : ""}`;
+
+const caseActionIds: number[] = [];
+for (const a of [
+  { label: "Block Sender", action: "block-sender" },
+  { label: "Remove from inboxes", action: "remove-from-inboxes" },
+]) {
+  const actionResponse = await fetch(`${base}/api/v2/cases/${created.case_id}/actions`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      url: handlerUrl,
+      label: a.label,
+      action_type: "webhook",
+      action_text: a.label,
+      query_params: { action: a.action, case_id: String(created.case_id), sender: email.from, subject: email.subject },
+    }),
+  });
+  if (!actionResponse.ok) {
+    throw new Error(`Case action "${a.label}" creation failed: ${actionResponse.status} ${await actionResponse.text()}`);
+  }
+  const caseAction = await actionResponse.json();
+
+  // The handler deletes the action it was clicked from, so the action's own id has to be
+  // folded back into its query params once Tines has assigned it.
+  const updated = await fetch(`${base}/api/v2/cases/${created.case_id}/actions/${caseAction.id}`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ query_params: { ...caseAction.query_params, case_action_id: String(caseAction.id) } }),
+  });
+  if (!updated.ok) {
+    throw new Error(`Case action "${a.label}" update failed: ${updated.status} ${await updated.text()}`);
+  }
+  caseActionIds.push(caseAction.id);
+  console.error(`Added case action "${a.label}" (${caseAction.id})`);
+}
+
 console.log(
   JSON.stringify({
     case_id: created.case_id,
@@ -204,5 +244,6 @@ console.log(
     risk_score: analysis.risk_score,
     verdict: analysis.verdict,
     indicators_flagged: flagged.length,
+    case_action_ids: caseActionIds,
   }),
 );

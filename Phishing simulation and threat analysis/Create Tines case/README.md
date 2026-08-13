@@ -14,3 +14,10 @@ The case carries:
 URLs and body text are defanged (`hxxp`, `[.]`) in the case so no one clicks them from the timeline.
 
 This step writes to Tines — every run creates a new case. Output is `{ case_id, case_url, priority, risk_score, verdict, indicators_flagged }`.
+
+## Case actions
+
+After the case is created, two webhook case actions are attached, both pointing at [the Case action handler step](<../Case action handler/script.ts>) with the action name, case id, case action id, sender, and subject as query params:
+
+- **Block Sender** — removes itself, then adds a note recording the blocked sender, who clicked, and when.
+- **Remove from inboxes** — removes itself, then adds a note with simulated inbox-sweep results and confirms removal from all inboxes.
