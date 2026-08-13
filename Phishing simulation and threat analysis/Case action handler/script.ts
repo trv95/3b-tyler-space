@@ -9,7 +9,22 @@ for (const line of lines.slice(1)) {
   const i = line.indexOf(":");
   if (i > 0) headers.set(line.slice(0, i).trim().toLowerCase(), line.slice(i + 1).trim());
 }
+const method = (lines[0]?.split(" ")[0] ?? "GET").toUpperCase();
 const query = new URL(requestTarget, "https://placeholder.invalid").searchParams;
+
+// The Tines case action button is clicked in the browser, so the request is cross-origin:
+// without a preflight response and CORS headers the click fails silently.
+const cors = [
+  "access-control-allow-origin: *",
+  "access-control-allow-methods: GET, POST, OPTIONS",
+  "access-control-allow-headers: content-type",
+  "access-control-max-age: 86400",
+].join("\r\n");
+
+if (method === "OPTIONS") {
+  process.stdout.write(`HTTP/1.1 204 No Content\r\n${cors}\r\ncontent-length: 0\r\n\r\n`);
+  process.exit(0);
+}
 
 let body: any = {};
 try {
@@ -39,7 +54,7 @@ if (base === "https://") throw new Error("TINES_URL is not set — is the Tines 
 if (!caseId || !caseActionId || !["block-sender", "remove-from-inboxes"].includes(action)) {
   const message = JSON.stringify({ error: "case_id, case_action_id and a valid action are required" });
   process.stdout.write(
-    `HTTP/1.1 400 Bad Request\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(message)}\r\n\r\n${message}`,
+    `HTTP/1.1 400 Bad Request\r\n${cors}\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(message)}\r\n\r\n${message}`,
   );
   process.exit(0);
 }
@@ -99,5 +114,5 @@ await tines(`/cases/${caseId}/comments`, { method: "POST", body: JSON.stringify(
 const payload = JSON.stringify({ case_id: Number(caseId), action, case_action_id: Number(caseActionId), performed_by: clickedBy });
 console.error(`Handled case action "${action}" on case ${caseId}`);
 process.stdout.write(
-  `HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(payload)}\r\n\r\n${payload}`,
+  `HTTP/1.1 200 OK\r\n${cors}\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(payload)}\r\n\r\n${payload}`,
 );
