@@ -1,0 +1,71 @@
+{
+  "get": {
+    "summary": "Return the cached snapshot of every Tines case",
+    "description": "Serves the JSON snapshot written by the Refresh case cache step. Returns 503 until a snapshot exists.",
+    "responses": {
+      "200": {
+        "description": "Case snapshot",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["fetchedAt", "tenant", "caseCount", "cases"],
+              "properties": {
+                "fetchedAt": { "type": "string", "format": "date-time" },
+                "tenant": { "type": "string", "format": "uri" },
+                "caseCount": { "type": "integer" },
+                "pagesFetched": { "type": "integer" },
+                "cases": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "name", "status", "priority", "team"],
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "name": { "type": "string" },
+                      "url": { "type": ["string", "null"] },
+                      "status": { "type": "string" },
+                      "subStatus": { "type": ["string", "null"] },
+                      "priority": { "type": "string" },
+                      "team": { "type": "string" },
+                      "teamId": { "type": ["integer", "null"] },
+                      "author": { "type": ["object", "null"], "properties": { "name": { "type": "string" }, "email": { "type": ["string", "null"] } } },
+                      "assignees": { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "email": { "type": ["string", "null"] } } } },
+                      "tags": { "type": "array", "items": { "type": "string" } },
+                      "techniques": { "type": "array", "items": { "type": "string" } },
+                      "tactics": { "type": "array", "items": { "type": "string" } },
+                      "otherLabels": { "type": "array", "items": { "type": "string" } },
+                      "openedAt": { "type": ["string", "null"] },
+                      "resolvedAt": { "type": ["string", "null"] },
+                      "createdAt": { "type": ["string", "null"] },
+                      "updatedAt": { "type": ["string", "null"] },
+                      "resolutionHours": { "type": ["number", "null"] },
+                      "slaExceeded": { "type": "boolean" },
+                      "slaWarning": { "type": "boolean" },
+                      "slaTypes": { "type": "array", "items": { "type": "string" } },
+                      "taskCount": { "type": "integer" },
+                      "openTaskCount": { "type": "integer" },
+                      "linkedCaseCount": { "type": "integer" },
+                      "metadataKeys": { "type": "array", "items": { "type": "string" } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "503": {
+        "description": "No snapshot has been built yet",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "error": { "type": "string" }, "message": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

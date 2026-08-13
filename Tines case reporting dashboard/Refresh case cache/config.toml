@@ -1,0 +1,8 @@
+color = "purple"
+output = true
+route = "/tines-case-refresh"
+route_auth = "space"
+route_type = "api"
+cron = "*/30 * * * *"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 300

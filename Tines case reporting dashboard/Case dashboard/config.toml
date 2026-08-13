@@ -1,0 +1,5 @@
+color = "sky"
+route = "/tines-case-dashboard"
+route_type = "webpage"
+output = true
+timeout = 60

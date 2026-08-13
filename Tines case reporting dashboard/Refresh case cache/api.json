@@ -1,0 +1,24 @@
+{
+  "post": {
+    "summary": "Rebuild the cached case snapshot from the Tines API",
+    "description": "Pages through every case in the Tines tenant, derives reporting fields, and replaces the cached snapshot. Also runs on a schedule every 30 minutes.",
+    "responses": {
+      "200": {
+        "description": "Snapshot rebuilt",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["ok", "caseCount", "fetchedAt"],
+              "properties": {
+                "ok": { "type": "boolean" },
+                "caseCount": { "type": "integer" },
+                "fetchedAt": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
