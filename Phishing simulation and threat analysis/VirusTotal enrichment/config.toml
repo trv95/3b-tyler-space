@@ -1,0 +1,4 @@
+color = "purple"
+links = ["AI risk analysis"]
+connectors = [{ name = "weindorf-virustotal", type = "virusTotal" }]
+timeout = 120
