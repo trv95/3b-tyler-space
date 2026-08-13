@@ -1,0 +1,4 @@
+color = "red"
+links = ["Look up host"]
+connectors = [{ name = "crowdstrike", type = "crowdStrike" }]
+timeout = 60

@@ -1,0 +1,4 @@
+color = "sky"
+links = ["Notify Slack"]
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 90
