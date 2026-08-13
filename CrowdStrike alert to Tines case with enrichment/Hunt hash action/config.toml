@@ -1,0 +1,7 @@
+color = "purple"
+output = true
+route = "/cs-hunt-hash"
+route_auth = "external_id:I3Ifo-n2Q_fStwGDwLjWk"
+route_type = "webhook"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }, { name = "weindorf-virustotal", type = "virusTotal" }]
+timeout = 90

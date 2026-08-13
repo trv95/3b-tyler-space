@@ -1,0 +1,7 @@
+color = "red"
+output = true
+route = "/cs-isolate-host"
+route_auth = "external_id:galkQc8e1HeZ19PCEvnJF"
+route_type = "webhook"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 60
