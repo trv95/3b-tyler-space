@@ -131,6 +131,15 @@ const iocSummary = [
     : "",
 ].join("\n");
 
+// Tines rejects task descriptions over 100 characters; the full text stays in the case description.
+const taskDescription = (text: string) => {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= 100) return clean;
+  const cut = clean.slice(0, 99);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 60 ? cut.slice(0, space) : cut).replace(/[\s.,;:–-]+$/, "")}…`;
+};
+
 const note = (title: string, content: string, color = "white") => ({
   title,
   block_type: "note",
@@ -181,7 +190,7 @@ const body = {
     worst_detection_count: virustotal.summary.worst_detection_count,
     simulation: true,
   },
-  tasks: (analysis.recommended_actions ?? []).slice(0, 6).map((a: string) => ({ description: a })),
+  tasks: (analysis.recommended_actions ?? []).slice(0, 6).map((a: string) => ({ description: taskDescription(a) })),
   blocks,
 };
 
