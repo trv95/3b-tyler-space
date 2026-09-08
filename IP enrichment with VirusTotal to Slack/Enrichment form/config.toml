@@ -1,0 +1,6 @@
+color = "sky"
+output = true
+route = "/ip-enrichment"
+route_auth = "space"
+route_type = "webpage"
+title = "IP enrichment"

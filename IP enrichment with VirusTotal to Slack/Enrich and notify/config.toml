@@ -1,0 +1,6 @@
+color = "teal"
+output = true
+route = "/ip-enrichment-submit"
+route_auth = "space"
+connectors = [{ name = "weindorf-virustotal", type = "virusTotal" }, { name = "tyler-slack", type = "slack" }]
+timeout = 30
