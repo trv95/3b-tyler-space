@@ -1,0 +1,1 @@
+Webhook route `/slack-events` (`external_id` auth) for the Slack Events API. Answers the `url_verification` challenge in plain text, ignores bot messages, subtyped messages, and other channels, and otherwise responds with `{ts, thread_ts, user, text}` — that response body is also the input to [Mirror to Teams](<../Mirror to Teams/script.ts>).

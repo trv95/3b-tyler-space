@@ -1,0 +1,5 @@
+color = "orange"
+cron = "*/20 * * * *"
+connectors = [{ name = "tyler-microsoft-teams", type = "microsoftTeams" }]
+timeout = 60
+retry_seconds = [10, 30]

@@ -1,0 +1,4 @@
+color = "purple"
+connectors = [{ name = "tyler-microsoft-teams", type = "microsoftTeams" }, { name = "tyler-slack", type = "slack" }]
+timeout = 60
+retry_seconds = [5, 20]

@@ -1,0 +1,1 @@
+Fetches each notified Teams message (or reply) from Graph, converts its HTML to Slack mrkdwn, and posts it with `chat.postMessage`, using `thread_map` to reply in the matching Slack thread. Skips messages this workflow itself created, then records the new Slack `ts`. Reads and writes `mirror.sqlite` on the `mirror_state` volume. Connectors: Tyler Microsoft Teams, Tyler Slack.

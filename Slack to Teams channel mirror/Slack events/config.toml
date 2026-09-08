@@ -1,0 +1,8 @@
+color = "green"
+output = true
+route = "/slack-events"
+route_auth = "external_id:XtzqgOjj6hQtjWdBuZhTo"
+route_type = "webhook"
+title = "Slack events"
+links = ["Mirror to Teams"]
+timeout = 30

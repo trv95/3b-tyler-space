@@ -1,0 +1,8 @@
+color = "green"
+output = true
+route = "/teams-notifications"
+route_auth = "external_id:DJwrzUj3QigvJ2ARl5jOi"
+route_type = "webhook"
+title = "Teams change notifications"
+links = ["Mirror to Slack"]
+timeout = 30
