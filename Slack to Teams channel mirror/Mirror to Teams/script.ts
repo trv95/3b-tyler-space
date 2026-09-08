@@ -10,12 +10,16 @@ const body = raw.startsWith("HTTP/")
   : raw.trim();
 if (!body) process.exit(0);
 
-const event = JSON.parse(body) as {
-  ts: string;
-  thread_ts: string | null;
-  user: string | null;
-  text: string;
-};
+type SlackMessage = { ts: string; thread_ts: string | null; user: string | null; text: string };
+
+// Slack's url_verification handshake echoes a plain-text challenge, not JSON.
+let event: SlackMessage;
+try {
+  event = JSON.parse(body) as SlackMessage;
+} catch {
+  process.exit(0);
+}
+if (!event?.ts || typeof event.text !== "string") process.exit(0);
 
 const db = new Database("/storage/mirror_state/mirror.sqlite");
 db.run("PRAGMA journal_mode = WAL");
