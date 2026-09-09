@@ -1,4 +1,3 @@
 color = "orange"
 links = ["Enrich IP with VirusTotal"]
-connectors = [{ name = "crowdstrike", type = "crowdStrike" }]
 timeout = 60
