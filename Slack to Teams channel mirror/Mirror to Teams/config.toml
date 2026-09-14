@@ -1,4 +1,4 @@
 color = "purple"
-connectors = [{ name = "tyler-microsoft-teams", type = "microsoftTeams" }, { name = "tyler-slack", type = "slack" }]
+connectors = [{ name = "tyler-microsoft-teams", type = "microsoftTeams" }, { name = "tyler-echo-slack-app", type = "slack" }]
 timeout = 60
 retry_seconds = [5, 20]
