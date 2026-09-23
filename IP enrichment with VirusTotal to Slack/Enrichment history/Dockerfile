@@ -12,7 +12,7 @@ RUN \
   chmod +x ./bun && \
   ./bun --version >/dev/null
 
-VOLUME ["ip-enrichment-history"]
+VOLUME ["ip-enrichment-history:ro"]
 
 COPY package.json .
 RUN \

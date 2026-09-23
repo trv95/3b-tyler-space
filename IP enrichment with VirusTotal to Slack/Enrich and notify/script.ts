@@ -1,4 +1,5 @@
 import { isIP } from "node:net";
+import { mkdir } from "node:fs/promises";
 
 function response(status: number, body: unknown) {
   const payload = JSON.stringify(body);
@@ -98,7 +99,13 @@ try {
     process.exit(0);
   }
 
-  response(200, { ip, verdict, country, network, asOwner, analysis, reportUrl, slack: { channel: slack.channel, timestamp: slack.ts } });
+  const result = { id: crypto.randomUUID(), enrichedAt: new Date().toISOString(), ip, verdict, country, network, asOwner, analysis, reportUrl, slack: { channel: slack.channel, timestamp: slack.ts } };
+  const day = result.enrichedAt.slice(0, 10);
+  const historyDir = `/storage/ip-enrichment-history/${day}`;
+  await mkdir(historyDir, { recursive: true });
+  await Bun.write(`${historyDir}/${result.id}.json`, JSON.stringify(result));
+
+  response(200, result);
 } catch (error) {
   console.error(error instanceof Error ? error.stack : String(error));
   throw error;

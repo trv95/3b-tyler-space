@@ -1,0 +1,22 @@
+{
+  "get": {
+    "summary": "List IP enrichment history",
+    "responses": {
+      "200": {
+        "description": "Newest enrichment results",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": { "type": "array", "items": { "type": "object" } },
+                "total": { "type": "integer" }
+              },
+              "required": ["items", "total"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

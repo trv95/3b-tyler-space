@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/ip-enrichment-history"
+route_auth = "space"
+route_type = "api"
+title = "IP enrichment history"
