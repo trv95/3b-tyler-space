@@ -1,0 +1,3 @@
+Runs hourly and acts once at 7:00 AM America/Los_Angeles, including daylight-saving changes. It reads unread Gmail messages received since the last successful briefing (or the prior 24 hours on its first run), matches senders to Salesforce Contacts and their open Opportunities, uses Claude to summarize and rank the messages primarily by total open opportunity value, and posts the briefing to Slack channel `3b-demo`.
+
+The cursor advances only after Slack confirms the post. A date-based Slack client message ID limits duplicate delivery during retries. Change the delivery time, timezone, email query, or destination in `script.ts`.

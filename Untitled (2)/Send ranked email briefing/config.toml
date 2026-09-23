@@ -1,0 +1,5 @@
+color = "purple"
+cron = "0 * * * *"
+connectors = [{ name = "anthropic-se-demos-please-only-use-this-one", type = "anthropic" }, { name = "tyler-slack", type = "slack" }]
+timeout = 300
+retry_seconds = [30, 120, 300]
