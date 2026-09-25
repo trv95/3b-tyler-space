@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3B Mock Vulnerability Data</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #657080;
+      --line: #d8dee8;
+      --line-soft: #e9edf3;
+      --blue: #0b5cab;
+      --blue-soft: #eaf2fb;
+      --green: #137a4f;
+      --green-soft: #e9f6ef;
+      --amber: #9f5f00;
+      --amber-soft: #fff4df;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+      --purple: #6d46a6;
+      --purple-soft: #f1ecfb;
+      --shadow: 0 12px 30px rgba(31, 41, 51, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 24px 44px;
+    }
+
+    header {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 22px 24px;
+      border-radius: 8px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.15;
+      margin: 0 0 8px;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      max-width: 920px;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 18px;
+    }
+
+    .meta div {
+      border: 1px solid var(--line-soft);
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #fbfcfe;
+    }
+
+    .label {
+      color: var(--muted);
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .value {
+      font-weight: 700;
+    }
+
+    .summary {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 18px 0;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 100px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr auto;
+      margin: 18px 0;
+      padding: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 4;
+    }
+
+    .search {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      font: inherit;
+      min-height: 40px;
+      padding: 8px 10px;
+      width: 100%;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    button {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      min-height: 40px;
+      padding: 8px 12px;
+    }
+
+    button[aria-selected="true"] {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #ffffff;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-top: 18px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      align-items: start;
+      border-bottom: 1px solid var(--line-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 0 0 4px;
+      letter-spacing: 0;
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .count-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 5px 9px;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 68vh;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 1120px;
+      width: 100%;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line-soft);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f6f9;
+      color: #334155;
+      font-size: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      font-size: 13px;
+    }
+
+    tr:hover td {
+      background: #fbfdff;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      min-width: 38px;
+      padding: 5px 8px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .p0, .critical, .high { background: var(--red-soft); color: var(--red); }
+    .p1 { background: var(--amber-soft); color: var(--amber); }
+    .p2, .medium { background: var(--blue-soft); color: var(--blue); }
+    .p3, .low { background: var(--green-soft); color: var(--green); }
+    .needs-review { background: var(--purple-soft); color: var(--purple); }
+    .open { background: var(--green-soft); color: var(--green); }
+
+    .empty {
+      color: var(--muted);
+      padding: 22px;
+    }
+
+    .note {
+      background: #fffaf0;
+      border: 1px solid #f1d69a;
+      border-radius: 8px;
+      color: #5f4100;
+      margin-top: 18px;
+      padding: 14px 16px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 900px) {
+      .shell { padding: 16px; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls { grid-template-columns: 1fr; }
+      .tabs { justify-content: flex-start; }
+      h1 { font-size: 24px; }
+    }
+
+    @media (max-width: 560px) {
+      .summary { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .count-pill { display: inline-block; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <p class="eyebrow">3B Vulnerability Management UAT</p>
+      <h1>Mock Vulnerability Data Snapshot</h1>
+      <p class="subtitle">Standalone view of the sanitized mock fixture used for Tines 3B testing. This page does not call the local mock API; the presentation-safe fields are embedded in the HTML.</p>
+      <div class="meta">
+        <div><span class="label">Classification</span><span class="value" id="classification"></span></div>
+        <div><span class="label">Fixture Generated</span><span class="value" id="generatedAt"></span></div>
+        <div><span class="label">Snapshot Built</span><span class="value" id="snapshotBuiltAt"></span></div>
+        <div><span class="label">Production Data Flag</span><span class="value" id="productionFlag"></span></div>
+      </div>
+    </header>
+
+    <section class="summary" aria-label="Dataset summary">
+      <div class="stat"><strong id="countBugdb">0</strong><span>BugDB mock tickets</span></div>
+      <div class="stat"><strong id="countQualys">0</strong><span>Qualys findings</span></div>
+      <div class="stat"><strong id="countSc">0</strong><span>Security Central findings</span></div>
+      <div class="stat"><strong id="countOwners">0</strong><span>Service owners</span></div>
+    </section>
+
+    <section class="controls" aria-label="Table controls">
+      <input class="search" id="search" type="search" placeholder="Search IDs, titles, owners, services, priorities, CVEs, tickets">
+      <div class="tabs" role="tablist" aria-label="Data tables">
+        <button type="button" role="tab" aria-selected="true" data-tab="bugdb">BugDB</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="qualys">Qualys</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="securityCentral">Security Central</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="owners">Owners</button>
+      </div>
+    </section>
+
+    <section class="section" id="tableSection">
+      <div class="section-head">
+        <div>
+          <h2 id="tableTitle">BugDB Mock Tickets</h2>
+          <p class="hint" id="tableHint">Created-ticket style output expected from the intake workflow.</p>
+        </div>
+        <span class="count-pill" id="visibleCount">0 records</span>
+      </div>
+      <div class="table-wrap" id="tableWrap"></div>
+    </section>
+
+    <aside class="note">
+      Data safety note: this is a UAT snapshot from mocked and sanitized data. Raw scan output and oversized detail fields are intentionally excluded from this shareable page.
+    </aside>
+  </main>
+
+  <script>
+    const DATA = {"generatedAt":"2026-05-12T15:06:04.946993Z","snapshotBuiltAt":"2026-05-15 09:51:34","classification":"UAT_SYNTHETIC_SANITIZED_SAMPLE","schemaVersion":"1.0.0","productionDataInOutput":false,"counts":{"owners":6,"qualys":36,"securityCentral":36,"bugdb":36},"priorityCounts":{"P0":7,"P2":26,"P3":3},"severityCounts":{"HIGH":7,"MEDIUM":26,"NEEDS REVIEW":3},"owners":[{"application":"AtlasPay Demo","service":"atlaspay-checkout-uat","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","spoc":"Ambrish R","spocEmail":"ambrish.r@oracle.com","target":"BugDB","project":"BUGDB-UAT","slack":"#uat-vm-atlaspay","component":"Checkout API"},{"application":"CedarHR Sandbox","service":"cedarhr-profile-uat","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","spoc":"Fraser Dumaye","spocEmail":"fraser.dumayne@oracle.com","target":"Jira","project":"CEDARSEC","slack":"#uat-vm-cedarhr","component":"Profile Service"},{"application":"NimbusAuth Lab","service":"nimbusauth-session-uat","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","spoc":"MD Atif Hussain","spocEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","project":"EJSEC","slack":"#uat-vm-nimbusauth","component":"Session Manager"},{"application":"Meridian Reports Demo","service":"meridian-reports-uat","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","spoc":"Erica Wong","spocEmail":"erica.w.wong@oracle.com","target":"BugDB","project":"BUGDB-UAT","slack":"#uat-vm-meridian","component":"Report UI"},{"application":"HelioPortal UAT","service":"helio-document-import-uat","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","spoc":"Tosin Akinola","spocEmail":"tosin.akinola@oracle.com","target":"BugDB","project":"BUGDB-UAT","slack":"#uat-vm-helio","component":"Document Import"},{"application":"Orion Billing Mock","service":"orion-billing-export-uat","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","spoc":"Sergey Shkundaleu","spocEmail":"sergey.shkundaleu@oracle.com","target":"Jira","project":"ORIONSEC","slack":"#uat-vm-orion","component":"Billing Export"}],"qualys":[{"findingId":"QUALYS-UAT-FIND-0001","qid":"163549","priority":"P0","risk":"High","title":"Oracle Enterprise Linux Security Update for libtiff (ELSA-2025-20034-0)","cve":"CVE-2025-8176","asset":"asset-uat-qualys-023","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000001","securityCentral":"SC-QUALYS-UAT-900001","remediation":"To resolve this issue, upgrade to the latest packages which contain a patch.Refer to Oracle Enterprise Linux advisory below for updates and patch information: ELSA-2025-20034-0"},{"findingId":"QUALYS-UAT-FIND-0002","qid":"377639","priority":"P0","risk":"High","title":"Apache Commons Arbitrary Code Execution (ACE) Vulnerability (Text4Shell) (CVE-2022-42889)","cve":"CVE-2022-42889","asset":"asset-uat-qualys-016","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000002","securityCentral":"SC-QUALYS-UAT-900002","remediation":"Customers are advised to visit Apache Commons Text for more information on this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0003","qid":"379405","priority":"P0","risk":"High","title":"Spring Framework Open Redirect Vulnerability","cve":"CVE-2024-22243","asset":"asset-uat-qualys-016","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000003","securityCentral":"SC-QUALYS-UAT-900003","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"findingId":"QUALYS-UAT-FIND-0004","qid":"379703","priority":"P0","risk":"High","title":"Spring Framework Multiple Vulnerabilities","cve":"CVE-2024-22262","asset":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000004","securityCentral":"SC-QUALYS-UAT-900004","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"findingId":"QUALYS-UAT-FIND-0005","qid":"38913","priority":"P0","risk":"High","title":"SSH Prefix Truncation Vulnerability (Terrapin)","cve":"CVE-2023-48795","asset":"asset-uat-qualys-026","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000005","securityCentral":"SC-QUALYS-UAT-900005","remediation":"Customers are advised to refer to the individual vendor advisory for their operating system and install the patch released by the vendor. For more information regarding the vulnerability, please refer to Terrapin Vulner..."},{"findingId":"QUALYS-UAT-FIND-0006","qid":"38919","priority":"P0","risk":"High","title":"OpenSSH Authentication Bypass Vulnerability","cve":"CVE-2023-51767","asset":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000006","securityCentral":"SC-QUALYS-UAT-900006","remediation":"There are no vendor supplied patches available at this time."},{"findingId":"QUALYS-UAT-FIND-0007","qid":"38968","priority":"P0","risk":"High","title":"OpenSSH Security Update (CVE-2025-26465)","cve":"CVE-2025-26465","asset":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000007","securityCentral":"SC-QUALYS-UAT-900007","remediation":"Customers are advised to upgrade to OpenSSH 9.9p2 or later to remediate this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0008","qid":"125001","priority":"P2","risk":"Medium","title":"RPC Portmapper Information","cve":"CVE-1999-0632","asset":"asset-uat-qualys-001","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000008","securityCentral":"SC-QUALYS-UAT-900008","remediation":"Check to be sure that the information reported adheres to your security policy."},{"findingId":"QUALYS-UAT-FIND-0009","qid":"163440","priority":"P2","risk":"Medium","title":"Oracle Enterprise Linux Security Update for gnutls (ELSA-2025-17415)","cve":"CVE-2025-32990, CVE-2025-6395, CVE-2025-32988","asset":"asset-uat-qualys-001","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000009","securityCentral":"SC-QUALYS-UAT-900009","remediation":"To resolve this issue, upgrade to the latest packages which contain a patch.Refer to Oracle Enterprise Linux advisory below for updates and patch information: ELSA-2025-17415"},{"findingId":"QUALYS-UAT-FIND-0010","qid":"376533","priority":"P2","risk":"Medium","title":"Spring Framework Denial of Service (DoS) Vulnerability","cve":"CVE-2022-22950","asset":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000010","securityCentral":"SC-QUALYS-UAT-900010","remediation":"The vendor has released an advisory to resolve these issues. Customers are advised to visit Spring Framework Advisory for more information on this."},{"findingId":"QUALYS-UAT-FIND-0011","qid":"376642","priority":"P2","risk":"Medium","title":"Spring Framework Denial of Service (DoS) Data Binding Vulnerability","cve":"CVE-2022-22970, CVE-2022-22971","asset":"asset-uat-qualys-016","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000011","securityCentral":"SC-QUALYS-UAT-900011","remediation":"The vendor has released an advisory to resolve these issues. Customers are advised to visit Spring Framework Advisory 70 Spring Framework Advisory 71 for more information on this."},{"findingId":"QUALYS-UAT-FIND-0012","qid":"380398","priority":"P2","risk":"Medium","title":"Spring Framework Spring Expression Denial of Service (DoS) Vulnerability","cve":"CVE-2024-38808","asset":"asset-uat-qualys-016","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000012","securityCentral":"SC-QUALYS-UAT-900012","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"findingId":"QUALYS-UAT-FIND-0013","qid":"38773","priority":"P2","risk":"Medium","title":"OpenSSH Integer overflow Vulnerability","cve":"CVE-2019-16905","asset":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000013","securityCentral":"SC-QUALYS-UAT-900013","remediation":"Customers are advised to upgrade to OpenSSH 8.1 or later to remediate these vulnerabilities."},{"findingId":"QUALYS-UAT-FIND-0014","qid":"38901","priority":"P2","risk":"Medium","title":"OpenSSH Command Injection Vulnerability","cve":"CVE-2020-15778","asset":"asset-uat-qualys-056","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000014","securityCentral":"SC-QUALYS-UAT-900014","remediation":"Customers are advised to upgrade to OpenSSH 8.3 or later to remediate these vulnerabilities."},{"findingId":"QUALYS-UAT-FIND-0015","qid":"38902","priority":"P2","risk":"Medium","title":"OpenSSH Man-in-the-Middle (MITM) Attack Vulnerability","cve":"CVE-2020-14145","asset":"asset-uat-qualys-056","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000015","securityCentral":"SC-QUALYS-UAT-900015","remediation":"Customers are advised to upgrade to OpenSSH 8.7 or later to remediate these vulnerabilities."},{"findingId":"QUALYS-UAT-FIND-0016","qid":"38904","priority":"P2","risk":"Medium","title":"OpenSSH Remote Code Execution (RCE) Vulnerability in its forwarded ssh-agent","cve":"CVE-2023-38408","asset":"asset-uat-qualys-056","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000016","securityCentral":"SC-QUALYS-UAT-900016","remediation":"Customers are advised to upgrade to OpenSSH 9.3p2 or later to remediate these vulnerabilities."},{"findingId":"QUALYS-UAT-FIND-0017","qid":"38915","priority":"P2","risk":"Medium","title":"OpenSSH OS Command Injection Vulnerability","cve":"CVE-2023-51385","asset":"asset-uat-qualys-056","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000017","securityCentral":"SC-QUALYS-UAT-900017","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0018","qid":"38928","priority":"P2","risk":"Medium","title":"OpenSSH Incomplete Constrains Sensitive Information Disclosure Vulnerability","cve":"CVE-2023-51384","asset":"asset-uat-qualys-056","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000018","securityCentral":"SC-QUALYS-UAT-900018","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0019","qid":"38984","priority":"P2","risk":"Medium","title":"OpenSSH SSH Protocol Vulnerability (CVE-2023-48795)","cve":"CVE-2023-48795","asset":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000019","securityCentral":"SC-QUALYS-UAT-900019","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0020","qid":"38999","priority":"P2","risk":"Medium","title":"OpenSSH ssh Function Vulnerability (CVE-2025-61984)","cve":"CVE-2025-61984","asset":"asset-uat-qualys-056","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000020","securityCentral":"SC-QUALYS-UAT-900020","remediation":"Customers are advised to upgrade to OpenSSH 10.1p1 or later to remediate this vulnerability."},{"findingId":"QUALYS-UAT-FIND-0021","qid":"74037","priority":"P2","risk":"Medium","title":"Possible Mail Relay","cve":"CVE-1999-0512, CVE-2002-1278, CVE-2003-0285","asset":"asset-uat-qualys-062","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000021","securityCentral":"SC-QUALYS-UAT-900021","remediation":"Disallow mail relaying if it is allowed. The mail exchanger will need to be reconfigured accordingly."},{"findingId":"QUALYS-UAT-FIND-0022","qid":"82054","priority":"P2","risk":"Medium","title":"TCP Sequence Number Approximation Based Denial of Service","cve":"CVE-2004-0230","asset":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000022","securityCentral":"SC-QUALYS-UAT-900022","remediation":"Please first check the results section below for the port number on which this vulnerability was detected. If that port number is known to be used for port-forwarding, then it is the backend host that is really vulnerab..."},{"findingId":"QUALYS-UAT-FIND-0023","qid":"105130","priority":"P2","risk":"Medium","title":"Unix Group List","cve":"","asset":"asset-uat-qualys-001","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000023","securityCentral":"SC-QUALYS-UAT-900023","remediation":"Check to be sure that the information provided adheres to your security policy."},{"findingId":"QUALYS-UAT-FIND-0024","qid":"105155","priority":"P2","risk":"Medium","title":"User Home Directory With Non-Restrictive Permissions","cve":"","asset":"asset-uat-qualys-018","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000024","securityCentral":"SC-QUALYS-UAT-900024","remediation":"Change the directory permissions by issuing the following command: chmod -R 750 (directory name)"},{"findingId":"QUALYS-UAT-FIND-0025","qid":"38229","priority":"P2","risk":"Medium","title":"Service Stopped Responding","cve":"","asset":"asset-uat-qualys-065","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000025","securityCentral":"SC-QUALYS-UAT-900025","remediation":"This QID can be posted for a number of reasons (e.g., service crash, bandwidth utilization, or a device with IPS-like behavior). If the service has crashed, report the incident to Customer Support or your QualysGuard re..."},{"findingId":"QUALYS-UAT-FIND-0026","qid":"38628","priority":"P2","risk":"Medium","title":"Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server supports Transport Layer Security (TLSv1.0)","cve":"","asset":"asset-uat-qualys-026","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000026","securityCentral":"SC-QUALYS-UAT-900026","remediation":"Disable the use of TLSv1.0 protocol in favor of a cryptographically stronger protocol such as TLSv1.2.The following openssl commands can be used to do a manual test:openssl s_client -connect ip:port -tls1If the test is..."},{"findingId":"QUALYS-UAT-FIND-0027","qid":"38794","priority":"P2","risk":"Medium","title":"Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server Supports Transport Layer Security (TLSv1.1)","cve":"","asset":"asset-uat-qualys-026","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000027","securityCentral":"SC-QUALYS-UAT-900027","remediation":"Disable the use of TLSv1.1 protocol in favor of a cryptographically stronger protocol such as TLSv1.2.The following openssl commands can be used to do a manual test:openssl s_client -connect ip:port -tls1_1If the test i..."},{"findingId":"QUALYS-UAT-FIND-0028","qid":"42017","priority":"P2","risk":"Medium","title":"Remote Access or Management Service Detected","cve":"","asset":"asset-uat-qualys-001","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000028","securityCentral":"SC-QUALYS-UAT-900028","remediation":"Expose the remote access or remote management services only to the system administrators or intended users of the system."},{"findingId":"QUALYS-UAT-FIND-0029","qid":"42416","priority":"P2","risk":"Medium","title":"DEFLATE Data Compression Algorithm Used for HTTPS","cve":"","asset":"asset-uat-qualys-010","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000029","securityCentral":"SC-QUALYS-UAT-900029","remediation":"N/A"},{"findingId":"QUALYS-UAT-FIND-0030","qid":"48001","priority":"P2","risk":"Medium","title":"Content-Security-Policy HTTP Security Header Not Detected","cve":"","asset":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000030","securityCentral":"SC-QUALYS-UAT-900030","remediation":"N/A"},{"findingId":"QUALYS-UAT-FIND-0031","qid":"66002","priority":"P2","risk":"Medium","title":"NFS Exported Filesystems List Vulnerability","cve":"","asset":"asset-uat-qualys-069","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","target":"BugDB","bug":"88000031","securityCentral":"SC-QUALYS-UAT-900031","remediation":"If the NFS server is not required on this system, then shutdown and disable the \"mountd\" and \"nfsd\" RPC services. If the NFS server is required on this system, then the solution is not as simple. Since the server's clie..."},{"findingId":"QUALYS-UAT-FIND-0032","qid":"86728","priority":"P2","risk":"Medium","title":"Web Server Uses Plain-Text Form Based Authentication","cve":"","asset":"asset-uat-qualys-023","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","target":"Jira","bug":"88000032","securityCentral":"SC-QUALYS-UAT-900032","remediation":"Please contact the vendor of the hardware/software for a possible fix for the issue. For custom applications, ensure that data sent via HTML login forms is encrypted before being sent from the client to the host."},{"findingId":"QUALYS-UAT-FIND-0033","qid":"86763","priority":"P2","risk":"Medium","title":"Web Server Uses Plain Text Basic Authentication","cve":"","asset":"asset-uat-qualys-016","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","target":"Enterprise Jira","bug":"88000033","securityCentral":"SC-QUALYS-UAT-900033","remediation":"Please contact the vendor of the hardware/software for a possible fix for the issue. It is advisable to work with vendor to disable communication over HTTP and make sure that every sensitive information transmits over H..."},{"findingId":"QUALYS-UAT-FIND-0034","qid":"1208","priority":"P3","risk":"Needs Review","title":"Qualys QID 1208","cve":"","asset":"asset-uat-qualys-001","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","target":"BugDB","bug":"88000034","securityCentral":"SC-QUALYS-UAT-900034","remediation":""},{"findingId":"QUALYS-UAT-FIND-0035","qid":"163572","priority":"P3","risk":"Needs Review","title":"Qualys QID 163572","cve":"","asset":"asset-uat-qualys-001","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","target":"BugDB","bug":"88000035","securityCentral":"SC-QUALYS-UAT-900035","remediation":""},{"findingId":"QUALYS-UAT-FIND-0036","qid":"45688","priority":"P3","risk":"Needs Review","title":"Qualys QID 45688","cve":"","asset":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","target":"Jira","bug":"88000036","securityCentral":"SC-QUALYS-UAT-900036","remediation":""}],"securityCentral":[{"securityCentralId":"SC-QUALYS-UAT-900001","severity":"HIGH","status":"Open","summary":"Oracle Enterprise Linux Security Update for libtiff (ELSA-2025-20034-0)","qid":"163549","cve":"CVE-2025-8176","resource":"asset-uat-qualys-023","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000001","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:22Z"},{"securityCentralId":"SC-QUALYS-UAT-900002","severity":"HIGH","status":"Open","summary":"Apache Commons Arbitrary Code Execution (ACE) Vulnerability (Text4Shell) (CVE-2022-42889)","qid":"377639","cve":"CVE-2022-42889","resource":"asset-uat-qualys-016","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000002","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900003","severity":"HIGH","status":"Open","summary":"Spring Framework Open Redirect Vulnerability","qid":"379405","cve":"CVE-2024-22243","resource":"asset-uat-qualys-016","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000003","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900004","severity":"HIGH","status":"Open","summary":"Spring Framework Multiple Vulnerabilities","qid":"379703","cve":"CVE-2024-22262","resource":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000004","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900005","severity":"HIGH","status":"Open","summary":"SSH Prefix Truncation Vulnerability (Terrapin)","qid":"38913","cve":"CVE-2023-48795","resource":"asset-uat-qualys-026","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000005","region":"CA_TORONTO_1","reported":"2025-12-03T09:27:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900006","severity":"HIGH","status":"Open","summary":"OpenSSH Authentication Bypass Vulnerability","qid":"38919","cve":"CVE-2023-51767","resource":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000006","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900007","severity":"HIGH","status":"Open","summary":"OpenSSH Security Update (CVE-2025-26465)","qid":"38968","cve":"CVE-2025-26465","resource":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000007","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900008","severity":"MEDIUM","status":"Open","summary":"RPC Portmapper Information","qid":"125001","cve":"CVE-1999-0632","resource":"asset-uat-qualys-001","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000008","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900009","severity":"MEDIUM","status":"Open","summary":"Oracle Enterprise Linux Security Update for gnutls (ELSA-2025-17415)","qid":"163440","cve":"CVE-2025-32990, CVE-2025-6395, CVE-2025-32988","resource":"asset-uat-qualys-001","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000009","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900010","severity":"MEDIUM","status":"Open","summary":"Spring Framework Denial of Service (DoS) Vulnerability","qid":"376533","cve":"CVE-2022-22950","resource":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000010","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900011","severity":"MEDIUM","status":"Open","summary":"Spring Framework Denial of Service (DoS) Data Binding Vulnerability","qid":"376642","cve":"CVE-2022-22970, CVE-2022-22971","resource":"asset-uat-qualys-016","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000011","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900012","severity":"MEDIUM","status":"Open","summary":"Spring Framework Spring Expression Denial of Service (DoS) Vulnerability","qid":"380398","cve":"CVE-2024-38808","resource":"asset-uat-qualys-016","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000012","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900013","severity":"MEDIUM","status":"Open","summary":"OpenSSH Integer overflow Vulnerability","qid":"38773","cve":"CVE-2019-16905","resource":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000013","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900014","severity":"MEDIUM","status":"Open","summary":"OpenSSH Command Injection Vulnerability","qid":"38901","cve":"CVE-2020-15778","resource":"asset-uat-qualys-056","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000014","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900015","severity":"MEDIUM","status":"Open","summary":"OpenSSH Man-in-the-Middle (MITM) Attack Vulnerability","qid":"38902","cve":"CVE-2020-14145","resource":"asset-uat-qualys-056","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000015","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900016","severity":"MEDIUM","status":"Open","summary":"OpenSSH Remote Code Execution (RCE) Vulnerability in its forwarded ssh-agent","qid":"38904","cve":"CVE-2023-38408","resource":"asset-uat-qualys-056","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000016","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900017","severity":"MEDIUM","status":"Open","summary":"OpenSSH OS Command Injection Vulnerability","qid":"38915","cve":"CVE-2023-51385","resource":"asset-uat-qualys-056","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000017","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900018","severity":"MEDIUM","status":"Open","summary":"OpenSSH Incomplete Constrains Sensitive Information Disclosure Vulnerability","qid":"38928","cve":"CVE-2023-51384","resource":"asset-uat-qualys-056","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000018","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900019","severity":"MEDIUM","status":"Open","summary":"OpenSSH SSH Protocol Vulnerability (CVE-2023-48795)","qid":"38984","cve":"CVE-2023-48795","resource":"asset-uat-qualys-056","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000019","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900020","severity":"MEDIUM","status":"Open","summary":"OpenSSH ssh Function Vulnerability (CVE-2025-61984)","qid":"38999","cve":"CVE-2025-61984","resource":"asset-uat-qualys-056","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000020","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:27Z"},{"securityCentralId":"SC-QUALYS-UAT-900021","severity":"MEDIUM","status":"Open","summary":"Possible Mail Relay","qid":"74037","cve":"CVE-1999-0512, CVE-2002-1278, CVE-2003-0285","resource":"asset-uat-qualys-062","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000021","region":"CA_TORONTO_1","reported":"2025-12-03T09:38:47Z"},{"securityCentralId":"SC-QUALYS-UAT-900022","severity":"MEDIUM","status":"Open","summary":"TCP Sequence Number Approximation Based Denial of Service","qid":"82054","cve":"CVE-2004-0230","resource":"asset-uat-qualys-016","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000022","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900023","severity":"MEDIUM","status":"Open","summary":"Unix Group List","qid":"105130","cve":"","resource":"asset-uat-qualys-001","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000023","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900024","severity":"MEDIUM","status":"Open","summary":"User Home Directory With Non-Restrictive Permissions","qid":"105155","cve":"","resource":"asset-uat-qualys-018","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000024","region":"CA_TORONTO_1","reported":"2025-12-03T09:43:22Z"},{"securityCentralId":"SC-QUALYS-UAT-900025","severity":"MEDIUM","status":"Open","summary":"Service Stopped Responding","qid":"38229","cve":"","resource":"asset-uat-qualys-065","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000025","region":"CA_TORONTO_1","reported":"2025-12-03T09:23:57Z"},{"securityCentralId":"SC-QUALYS-UAT-900026","severity":"MEDIUM","status":"Open","summary":"Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server supports Transport Layer Security (TLSv1.0)","qid":"38628","cve":"","resource":"asset-uat-qualys-026","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000026","region":"CA_TORONTO_1","reported":"2025-12-03T09:27:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900027","severity":"MEDIUM","status":"Open","summary":"Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server Supports Transport Layer Security (TLSv1.1)","qid":"38794","cve":"","resource":"asset-uat-qualys-026","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000027","region":"CA_TORONTO_1","reported":"2025-12-03T09:27:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900028","severity":"MEDIUM","status":"Open","summary":"Remote Access or Management Service Detected","qid":"42017","cve":"","resource":"asset-uat-qualys-001","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000028","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900029","severity":"MEDIUM","status":"Open","summary":"DEFLATE Data Compression Algorithm Used for HTTPS","qid":"42416","cve":"","resource":"asset-uat-qualys-010","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000029","region":"CA_TORONTO_1","reported":"2025-12-03T09:27:54Z"},{"securityCentralId":"SC-QUALYS-UAT-900030","severity":"MEDIUM","status":"Open","summary":"Content-Security-Policy HTTP Security Header Not Detected","qid":"48001","cve":"","resource":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000030","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900031","severity":"MEDIUM","status":"Open","summary":"NFS Exported Filesystems List Vulnerability","qid":"66002","cve":"","resource":"asset-uat-qualys-069","service":"atlaspay-checkout-uat","ownerEmail":"ambrish.r@oracle.com","bug":"88000031","region":"CA_TORONTO_1","reported":"2025-12-03T09:13:20Z"},{"securityCentralId":"SC-QUALYS-UAT-900032","severity":"MEDIUM","status":"Open","summary":"Web Server Uses Plain-Text Form Based Authentication","qid":"86728","cve":"","resource":"asset-uat-qualys-023","service":"cedarhr-profile-uat","ownerEmail":"fraser.dumayne@oracle.com","bug":"88000032","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:22Z"},{"securityCentralId":"SC-QUALYS-UAT-900033","severity":"MEDIUM","status":"Open","summary":"Web Server Uses Plain Text Basic Authentication","qid":"86763","cve":"","resource":"asset-uat-qualys-016","service":"nimbusauth-session-uat","ownerEmail":"md.atif.hussain@oracle.com","bug":"88000033","region":"CA_TORONTO_1","reported":"2025-12-03T09:51:45Z"},{"securityCentralId":"SC-QUALYS-UAT-900034","severity":"NEEDS REVIEW","status":"Open","summary":"Qualys QID 1208","qid":"1208","cve":"","resource":"asset-uat-qualys-001","service":"meridian-reports-uat","ownerEmail":"erica.w.wong@oracle.com","bug":"88000034","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900035","severity":"NEEDS REVIEW","status":"Open","summary":"Qualys QID 163572","qid":"163572","cve":"","resource":"asset-uat-qualys-001","service":"helio-document-import-uat","ownerEmail":"tosin.akinola@oracle.com","bug":"88000035","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"},{"securityCentralId":"SC-QUALYS-UAT-900036","severity":"NEEDS REVIEW","status":"Open","summary":"Qualys QID 45688","qid":"45688","cve":"","resource":"asset-uat-qualys-001","service":"orion-billing-export-uat","ownerEmail":"sergey.shkundaleu@oracle.com","bug":"88000036","region":"CA_TORONTO_1","reported":"2025-12-03T09:36:17Z"}],"bugdb":[{"bug":"88000001","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] Oracle Enterprise Linux Security Update for libtiff (ELSA-2025-20034-0)","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0001","securityCentral":"SC-QUALYS-UAT-900001","cve":"CVE-2025-8176","remediation":"To resolve this issue, upgrade to the latest packages which contain a patch.Refer to Oracle Enterprise Linux advisory below for updates and patch information: ELSA-2025-20034-0"},{"bug":"88000002","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] Apache Commons Arbitrary Code Execution (ACE) Vulnerability (Text4Shell) (CVE-2022-42889)","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0002","securityCentral":"SC-QUALYS-UAT-900002","cve":"CVE-2022-42889","remediation":"Customers are advised to visit Apache Commons Text for more information on this vulnerability."},{"bug":"88000003","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] Spring Framework Open Redirect Vulnerability","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0003","securityCentral":"SC-QUALYS-UAT-900003","cve":"CVE-2024-22243","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"bug":"88000004","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] Spring Framework Multiple Vulnerabilities","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0004","securityCentral":"SC-QUALYS-UAT-900004","cve":"CVE-2024-22262","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"bug":"88000005","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] SSH Prefix Truncation Vulnerability (Terrapin)","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0005","securityCentral":"SC-QUALYS-UAT-900005","cve":"CVE-2023-48795","remediation":"Customers are advised to refer to the individual vendor advisory for their operating system and install the patch released by the vendor. For more information regarding the vulnerability, please refer to Terrapin Vulner..."},{"bug":"88000006","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] OpenSSH Authentication Bypass Vulnerability","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0006","securityCentral":"SC-QUALYS-UAT-900006","cve":"CVE-2023-51767","remediation":"There are no vendor supplied patches available at this time."},{"bug":"88000007","priority":"P0","risk":"High","severity":4,"status":"Open","subject":"[P0][High] OpenSSH Security Update (CVE-2025-26465)","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0007","securityCentral":"SC-QUALYS-UAT-900007","cve":"CVE-2025-26465","remediation":"Customers are advised to upgrade to OpenSSH 9.9p2 or later to remediate this vulnerability."},{"bug":"88000008","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] RPC Portmapper Information","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0008","securityCentral":"SC-QUALYS-UAT-900008","cve":"CVE-1999-0632","remediation":"Check to be sure that the information reported adheres to your security policy."},{"bug":"88000009","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Oracle Enterprise Linux Security Update for gnutls (ELSA-2025-17415)","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0009","securityCentral":"SC-QUALYS-UAT-900009","cve":"CVE-2025-32990, CVE-2025-6395, CVE-2025-32988","remediation":"To resolve this issue, upgrade to the latest packages which contain a patch.Refer to Oracle Enterprise Linux advisory below for updates and patch information: ELSA-2025-17415"},{"bug":"88000010","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Spring Framework Denial of Service (DoS) Vulnerability","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0010","securityCentral":"SC-QUALYS-UAT-900010","cve":"CVE-2022-22950","remediation":"The vendor has released an advisory to resolve these issues. Customers are advised to visit Spring Framework Advisory for more information on this."},{"bug":"88000011","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Spring Framework Denial of Service (DoS) Data Binding Vulnerability","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0011","securityCentral":"SC-QUALYS-UAT-900011","cve":"CVE-2022-22970, CVE-2022-22971","remediation":"The vendor has released an advisory to resolve these issues. Customers are advised to visit Spring Framework Advisory 70 Spring Framework Advisory 71 for more information on this."},{"bug":"88000012","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Spring Framework Spring Expression Denial of Service (DoS) Vulnerability","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0012","securityCentral":"SC-QUALYS-UAT-900012","cve":"CVE-2024-38808","remediation":"Vendor has released patch addressing the vulnerability. For more information, please refer to the Spring Core Security Advisory"},{"bug":"88000013","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH Integer overflow Vulnerability","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0013","securityCentral":"SC-QUALYS-UAT-900013","cve":"CVE-2019-16905","remediation":"Customers are advised to upgrade to OpenSSH 8.1 or later to remediate these vulnerabilities."},{"bug":"88000014","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH Command Injection Vulnerability","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0014","securityCentral":"SC-QUALYS-UAT-900014","cve":"CVE-2020-15778","remediation":"Customers are advised to upgrade to OpenSSH 8.3 or later to remediate these vulnerabilities."},{"bug":"88000015","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH Man-in-the-Middle (MITM) Attack Vulnerability","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0015","securityCentral":"SC-QUALYS-UAT-900015","cve":"CVE-2020-14145","remediation":"Customers are advised to upgrade to OpenSSH 8.7 or later to remediate these vulnerabilities."},{"bug":"88000016","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH Remote Code Execution (RCE) Vulnerability in its forwarded ssh-agent","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0016","securityCentral":"SC-QUALYS-UAT-900016","cve":"CVE-2023-38408","remediation":"Customers are advised to upgrade to OpenSSH 9.3p2 or later to remediate these vulnerabilities."},{"bug":"88000017","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH OS Command Injection Vulnerability","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0017","securityCentral":"SC-QUALYS-UAT-900017","cve":"CVE-2023-51385","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"bug":"88000018","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH Incomplete Constrains Sensitive Information Disclosure Vulnerability","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0018","securityCentral":"SC-QUALYS-UAT-900018","cve":"CVE-2023-51384","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"bug":"88000019","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH SSH Protocol Vulnerability (CVE-2023-48795)","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0019","securityCentral":"SC-QUALYS-UAT-900019","cve":"CVE-2023-48795","remediation":"Customers are advised to upgrade to OpenSSH 9.6 or later to remediate this vulnerability."},{"bug":"88000020","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] OpenSSH ssh Function Vulnerability (CVE-2025-61984)","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0020","securityCentral":"SC-QUALYS-UAT-900020","cve":"CVE-2025-61984","remediation":"Customers are advised to upgrade to OpenSSH 10.1p1 or later to remediate this vulnerability."},{"bug":"88000021","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Possible Mail Relay","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0021","securityCentral":"SC-QUALYS-UAT-900021","cve":"CVE-1999-0512, CVE-2002-1278, CVE-2003-0285","remediation":"Disallow mail relaying if it is allowed. The mail exchanger will need to be reconfigured accordingly."},{"bug":"88000022","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] TCP Sequence Number Approximation Based Denial of Service","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0022","securityCentral":"SC-QUALYS-UAT-900022","cve":"CVE-2004-0230","remediation":"Please first check the results section below for the port number on which this vulnerability was detected. If that port number is known to be used for port-forwarding, then it is the backend host that is really vulnerab..."},{"bug":"88000023","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Unix Group List","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0023","securityCentral":"SC-QUALYS-UAT-900023","cve":"","remediation":"Check to be sure that the information provided adheres to your security policy."},{"bug":"88000024","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] User Home Directory With Non-Restrictive Permissions","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0024","securityCentral":"SC-QUALYS-UAT-900024","cve":"","remediation":"Change the directory permissions by issuing the following command: chmod -R 750 (directory name)"},{"bug":"88000025","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Service Stopped Responding","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0025","securityCentral":"SC-QUALYS-UAT-900025","cve":"","remediation":"This QID can be posted for a number of reasons (e.g., service crash, bandwidth utilization, or a device with IPS-like behavior). If the service has crashed, report the incident to Customer Support or your QualysGuard re..."},{"bug":"88000026","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server supports Transport Layer Security (TLSv1.0)","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0026","securityCentral":"SC-QUALYS-UAT-900026","cve":"","remediation":"Disable the use of TLSv1.0 protocol in favor of a cryptographically stronger protocol such as TLSv1.2.The following openssl commands can be used to do a manual test:openssl s_client -connect ip:port -tls1If the test is..."},{"bug":"88000027","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Secure Sockets Layer/Transport Layer Security (SSL/TLS) Server Supports Transport Layer Security (TLSv1.1)","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0027","securityCentral":"SC-QUALYS-UAT-900027","cve":"","remediation":"Disable the use of TLSv1.1 protocol in favor of a cryptographically stronger protocol such as TLSv1.2.The following openssl commands can be used to do a manual test:openssl s_client -connect ip:port -tls1_1If the test i..."},{"bug":"88000028","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Remote Access or Management Service Detected","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0028","securityCentral":"SC-QUALYS-UAT-900028","cve":"","remediation":"Expose the remote access or remote management services only to the system administrators or intended users of the system."},{"bug":"88000029","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] DEFLATE Data Compression Algorithm Used for HTTPS","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0029","securityCentral":"SC-QUALYS-UAT-900029","cve":"","remediation":"N/A"},{"bug":"88000030","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Content-Security-Policy HTTP Security Header Not Detected","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0030","securityCentral":"SC-QUALYS-UAT-900030","cve":"","remediation":"N/A"},{"bug":"88000031","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] NFS Exported Filesystems List Vulnerability","product":"AtlasPay Demo","component":"Checkout API","owner":"Ambrish R","ownerEmail":"ambrish.r@oracle.com","slack":"#uat-vm-atlaspay","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0031","securityCentral":"SC-QUALYS-UAT-900031","cve":"","remediation":"If the NFS server is not required on this system, then shutdown and disable the \"mountd\" and \"nfsd\" RPC services. If the NFS server is required on this system, then the solution is not as simple. Since the server's clie..."},{"bug":"88000032","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Web Server Uses Plain-Text Form Based Authentication","product":"CedarHR Sandbox","component":"Profile Service","owner":"Fraser Dumaye","ownerEmail":"fraser.dumayne@oracle.com","slack":"#uat-vm-cedarhr","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0032","securityCentral":"SC-QUALYS-UAT-900032","cve":"","remediation":"Please contact the vendor of the hardware/software for a possible fix for the issue. For custom applications, ensure that data sent via HTML login forms is encrypted before being sent from the client to the host."},{"bug":"88000033","priority":"P2","risk":"Medium","severity":3,"status":"Open","subject":"[P2][Medium] Web Server Uses Plain Text Basic Authentication","product":"NimbusAuth Lab","component":"Session Manager","owner":"MD Atif Hussain","ownerEmail":"md.atif.hussain@oracle.com","slack":"#uat-vm-nimbusauth","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0033","securityCentral":"SC-QUALYS-UAT-900033","cve":"","remediation":"Please contact the vendor of the hardware/software for a possible fix for the issue. It is advisable to work with vendor to disable communication over HTTP and make sure that every sensitive information transmits over H..."},{"bug":"88000034","priority":"P3","risk":"Needs Review","severity":3,"status":"Open","subject":"[P3][Needs Review] Qualys QID 1208","product":"Meridian Reports","component":"Report UI","owner":"Erica Wong","ownerEmail":"erica.w.wong@oracle.com","slack":"#uat-vm-meridian","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0034","securityCentral":"SC-QUALYS-UAT-900034","cve":"","remediation":""},{"bug":"88000035","priority":"P3","risk":"Needs Review","severity":3,"status":"Open","subject":"[P3][Needs Review] Qualys QID 163572","product":"HelioPortal","component":"Document Import","owner":"Tosin Akinola","ownerEmail":"tosin.akinola@oracle.com","slack":"#uat-vm-helio","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0035","securityCentral":"SC-QUALYS-UAT-900035","cve":"","remediation":""},{"bug":"88000036","priority":"P3","risk":"Needs Review","severity":3,"status":"Open","subject":"[P3][Needs Review] Qualys QID 45688","product":"Orion Billing","component":"Billing Export","owner":"Sergey Shkundaleu","ownerEmail":"sergey.shkundaleu@oracle.com","slack":"#uat-vm-orion","source":"Qualys","sourceFinding":"QUALYS-UAT-FIND-0036","securityCentral":"SC-QUALYS-UAT-900036","cve":"","remediation":""}]};
+
+    const TABLES = {
+      bugdb: {
+        title: "BugDB Mock Tickets",
+        hint: "Created-ticket style output expected from the intake workflow.",
+        rows: DATA.bugdb,
+        columns: [
+          ["Bug", "bug", "mono"],
+          ["Priority", "priority", "badge"],
+          ["Risk", "risk", "badge"],
+          ["Subject", "subject"],
+          ["Product", "product"],
+          ["Component", "component"],
+          ["Owner", "ownerEmail"],
+          ["Source", "source"],
+          ["Source Finding", "sourceFinding", "mono"],
+          ["Security Central", "securityCentral", "mono"],
+          ["CVE", "cve", "mono"]
+        ]
+      },
+      qualys: {
+        title: "Qualys Findings",
+        hint: "Input-style findings with routing and linked mock ticket references.",
+        rows: DATA.qualys,
+        columns: [
+          ["Finding", "findingId", "mono"],
+          ["QID", "qid", "mono"],
+          ["Priority", "priority", "badge"],
+          ["Risk", "risk", "badge"],
+          ["Title", "title"],
+          ["CVE", "cve", "mono"],
+          ["Asset", "asset", "mono"],
+          ["Service", "service"],
+          ["Owner", "ownerEmail"],
+          ["Target", "target"],
+          ["Bug", "bug", "mono"]
+        ]
+      },
+      securityCentral: {
+        title: "Security Central Findings",
+        hint: "Security Central-style finding records mapped to service ownership and BugDB tickets.",
+        rows: DATA.securityCentral,
+        columns: [
+          ["SC ID", "securityCentralId", "mono"],
+          ["Severity", "severity", "badge"],
+          ["Status", "status", "badge"],
+          ["Summary", "summary"],
+          ["QID", "qid", "mono"],
+          ["CVE", "cve", "mono"],
+          ["Resource", "resource", "mono"],
+          ["Service", "service"],
+          ["Owner", "ownerEmail"],
+          ["Bug", "bug", "mono"],
+          ["Region", "region"]
+        ]
+      },
+      owners: {
+        title: "Service Owners and Routing",
+        hint: "Owner, SPOC, Slack, and target-ticket routing used by the mock workflow.",
+        rows: DATA.owners,
+        columns: [
+          ["Application", "application"],
+          ["Service", "service"],
+          ["Owner", "owner"],
+          ["Owner Email", "ownerEmail"],
+          ["SPOC", "spoc"],
+          ["SPOC Email", "spocEmail"],
+          ["Target", "target", "badge"],
+          ["Project", "project", "mono"],
+          ["Slack", "slack", "mono"],
+          ["Component", "component"]
+        ]
+      }
+    };
+
+    let activeTab = "bugdb";
+
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+    const slug = (value) => String(value || "needs review")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "needs-review";
+
+    const asBadge = (value) => `<span class="badge ${slug(value)}">${escapeHtml(value || "Needs Review")}</span>`;
+
+    const matchesSearch = (row, query) => {
+      if (!query) return true;
+      return Object.values(row).join(" ").toLowerCase().includes(query);
+    };
+
+    const renderTable = () => {
+      const table = TABLES[activeTab];
+      const query = document.getElementById("search").value.trim().toLowerCase();
+      const rows = table.rows.filter((row) => matchesSearch(row, query));
+
+      document.getElementById("tableTitle").textContent = table.title;
+      document.getElementById("tableHint").textContent = table.hint;
+      document.getElementById("visibleCount").textContent = `${rows.length} of ${table.rows.length} records`;
+
+      if (!rows.length) {
+        document.getElementById("tableWrap").innerHTML = '<div class="empty">No records match the current search.</div>';
+        return;
+      }
+
+      const header = table.columns.map(([label]) => `<th>${escapeHtml(label)}</th>`).join("");
+      const body = rows.map((row) => {
+        const cells = table.columns.map(([, key, type]) => {
+          const value = row[key];
+          const content = type === "badge" ? asBadge(value) : escapeHtml(value);
+          const cls = type === "mono" ? ' class="mono"' : "";
+          return `<td${cls}>${content}</td>`;
+        }).join("");
+        return `<tr>${cells}</tr>`;
+      }).join("");
+
+      document.getElementById("tableWrap").innerHTML = `<table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+    };
+
+    const setTab = (tab) => {
+      activeTab = tab;
+      document.querySelectorAll("[data-tab]").forEach((button) => {
+        button.setAttribute("aria-selected", String(button.dataset.tab === tab));
+      });
+      renderTable();
+    };
+
+    document.getElementById("classification").textContent = DATA.classification;
+    document.getElementById("generatedAt").textContent = DATA.generatedAt || "N/A";
+    document.getElementById("snapshotBuiltAt").textContent = DATA.snapshotBuiltAt;
+    document.getElementById("productionFlag").textContent = DATA.productionDataInOutput ? "true" : "false";
+    document.getElementById("countBugdb").textContent = DATA.counts.bugdb;
+    document.getElementById("countQualys").textContent = DATA.counts.qualys;
+    document.getElementById("countSc").textContent = DATA.counts.securityCentral;
+    document.getElementById("countOwners").textContent = DATA.counts.owners;
+
+    document.getElementById("search").addEventListener("input", renderTable);
+    document.querySelectorAll("[data-tab]").forEach((button) => {
+      button.addEventListener("click", () => setTab(button.dataset.tab));
+    });
+
+    renderTable();
+  </script>
+</body>
+</html>

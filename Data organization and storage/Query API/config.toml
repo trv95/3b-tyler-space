@@ -1,0 +1,4 @@
+color = "sky"
+output = true
+route = "/vuln-data"
+route_type = "api"

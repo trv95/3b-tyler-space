@@ -1,0 +1,35 @@
+{
+  "get": {
+    "summary": "Query the sample vulnerability dataset",
+    "parameters": [
+      { "name": "table", "in": "query", "required": false, "schema": { "type": "string", "enum": ["owners", "qualys", "security_central", "bugdb"] }, "description": "Table to return. Omit for an overview of counts and metadata." },
+      { "name": "search", "in": "query", "required": false, "schema": { "type": "string" }, "description": "Free-text substring match across all columns." },
+      { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "default": 500, "maximum": 1000 } },
+      { "name": "offset", "in": "query", "required": false, "schema": { "type": "integer", "default": 0 } },
+      { "name": "sql", "in": "query", "required": false, "schema": { "type": "string" }, "description": "A single read-only SELECT/WITH statement." }
+    ],
+    "responses": {
+      "200": { "description": "Query result", "content": { "application/json": { "schema": { "type": "object" } } } },
+      "503": { "description": "Database not seeded yet" }
+    }
+  },
+  "post": {
+    "summary": "Run a read-only SQL query",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["sql"],
+            "properties": { "sql": { "type": "string", "description": "A single read-only SELECT/WITH statement." } }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": { "description": "Query result", "content": { "application/json": { "schema": { "type": "object", "properties": { "count": { "type": "integer" }, "rows": { "type": "array", "items": { "type": "object" } } } } } } },
+      "400": { "description": "Invalid or non-read-only SQL" }
+    }
+  }
+}
