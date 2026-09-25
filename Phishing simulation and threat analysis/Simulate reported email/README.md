@@ -2,13 +2,13 @@ Builds a synthetic phishing email and hands it to the pipeline, so the whole inv
 
 Triggered manually — hit **Run** on this step.
 
-The generated RFC 822 message deliberately contains realistic triage material:
+The generated RFC 822 message models a vendor-payment lure with safe, reserved training indicators:
 
-- spoofed `From` (`it-servicedesk@account-sec-review.com`) with an unrelated `Reply-To` and `Return-Path`
-- failing SPF/DKIM/DMARC in `Authentication-Results`
-- three public IPs across `Received` and `X-Originating-IP`
-- two URLs — one known-bad (`malware.wicar.org`) and one lookalike Microsoft login host
-- two attachments — a `.doc` whose bytes are the EICAR test string (so VirusTotal returns real detections) and a credential-harvesting HTML form
+- vendor-payment sender and reply-to addresses under `.example`
+- SPF, DKIM, and DMARC failures in `Authentication-Results`
+- three TEST-NET IPs across `Received` and `X-Originating-IP`
+- a lookalike vendor-portal URL under `.example`
+- two harmless base64 attachments: a remittance text file and a training HTML page with no credential collection
 
 Nothing is sent anywhere; the message only exists as JSON on stdout:
 
