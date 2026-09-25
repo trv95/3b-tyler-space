@@ -1,0 +1,4 @@
+color = "purple"
+output = true
+route = "/ciso-infosec-dashboard"
+route_type = "webpage"

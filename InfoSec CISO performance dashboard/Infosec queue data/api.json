@@ -1,0 +1,61 @@
+{
+  "get": {
+    "summary": "Sample ServiceNow InfoSec queue incidents for the last 180 days",
+    "responses": {
+      "200": {
+        "description": "Incident records plus SLA targets",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["generated_at", "incidents"],
+              "properties": {
+                "generated_at": { "type": "string", "format": "date-time" },
+                "window_start": { "type": "string", "format": "date-time" },
+                "assignment_group": { "type": "string" },
+                "source": { "type": "string" },
+                "analysts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": { "name": { "type": "string" }, "tier": { "type": "string" } }
+                  }
+                },
+                "sla_targets": {
+                  "type": "object",
+                  "additionalProperties": { "type": "array", "items": { "type": "number" } }
+                },
+                "incidents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "number": { "type": "string" },
+                      "assignment_group": { "type": "string" },
+                      "assigned_to": { "type": "string" },
+                      "tier": { "type": "string" },
+                      "priority": { "type": "string" },
+                      "category": { "type": "string" },
+                      "business_service": { "type": "string" },
+                      "contact_type": { "type": "string" },
+                      "state": { "type": "string" },
+                      "opened_at": { "type": "string", "format": "date-time" },
+                      "responded_at": { "type": ["string", "null"], "format": "date-time" },
+                      "resolved_at": { "type": ["string", "null"], "format": "date-time" },
+                      "response_sla_hours": { "type": "number" },
+                      "resolution_sla_hours": { "type": "number" },
+                      "reassignment_count": { "type": "integer" },
+                      "reopen_count": { "type": "integer" },
+                      "major_incident": { "type": "boolean" },
+                      "short_description": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+color = "teal"
+output = true
+route = "/infosec-queue-data"
+route_type = "api"
+timeout = 60
