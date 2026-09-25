@@ -1,0 +1,1 @@
+Runs hourly and queries approved grants. It identifies expired grants for revocation and grants needing a 24-hour warning. It currently reports these actions in safe simulation mode; attach the selected NAC and notification connectors before enabling live side effects.

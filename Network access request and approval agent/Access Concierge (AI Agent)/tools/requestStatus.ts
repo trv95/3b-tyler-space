@@ -1,0 +1,3 @@
+import { tool } from "ai";
+import { z } from "zod";
+export default tool({description:"Look up the authenticated requester's latest request or a request by ID.",inputSchema:z.object({id:z.string().optional()}),execute:async({id})=>{const base=process.env._3B_WORKFLOW_BASE_URL;if(!base)throw new Error("Workflow base URL unavailable");const u=new URL(`${base}/network-access-api`);u.searchParams.set("action","status");if(id)u.searchParams.set("id",id);const r=await fetch(u,{signal:AbortSignal.timeout(10000)});if(r.status===404)return {found:false};if(!r.ok)throw new Error(`Status lookup failed: ${r.status}`);return {found:true,request:await r.json()};}});

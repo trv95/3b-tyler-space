@@ -1,0 +1,1 @@
+Space-authenticated policy and audit service. `/evaluate` classifies risk and flags; `/submit` creates an idempotent request record and simulated grant; `/decision` records a human decision; `/status` returns only the authenticated requester's request; `/report` supports operational reporting. State is stored in a durable SQLite ledger with serialized writes.

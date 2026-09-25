@@ -1,0 +1,8 @@
+color = "purple"
+connectors = [{ name = "anthropic-se-demos-please-only-use-this-one", type = "anthropic" }]
+timeout = 300
+route = "/network-access-agent"
+route_auth = "space"
+route_type = "api"
+title = "Network access concierge"
+output = true

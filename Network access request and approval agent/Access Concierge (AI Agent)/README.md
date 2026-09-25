@@ -1,0 +1,1 @@
+Interactive agent invoked by the chat page. It progressively gathers identity context, access target, justification, device, location, and duration; evaluates policy; confirms the full request; and submits only after explicit confirmation. The Anthropic connector supplies model authentication.

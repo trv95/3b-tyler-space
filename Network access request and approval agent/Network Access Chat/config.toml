@@ -1,0 +1,6 @@
+color = "green"
+output = true
+route = "/network-access"
+route_auth = "space"
+route_type = "webpage"
+title = "Network Access Concierge"

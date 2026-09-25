@@ -1,0 +1,7 @@
+color = "teal"
+output = true
+route = "/network-access-api"
+route_auth = "space"
+route_type = "api"
+title = "Network access request service"
+timeout = 30
