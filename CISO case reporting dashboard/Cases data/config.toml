@@ -1,0 +1,6 @@
+color = "sky"
+output = true
+route = "/cases-data"
+route_type = "api"
+apps = [{ name = "tines", type = "tines" }]
+timeout = 120

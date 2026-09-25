@@ -1,0 +1,4 @@
+output = true
+route = "/case-dashboard"
+route_type = "webpage"
+color = "purple"

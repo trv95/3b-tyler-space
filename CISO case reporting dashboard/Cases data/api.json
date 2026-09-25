@@ -1,0 +1,51 @@
+{
+  "get": {
+    "summary": "List cases for the CISO dashboard",
+    "description": "Returns a trimmed set of cases fetched from the Tines Cases API.",
+    "responses": {
+      "200": {
+        "description": "Cases fetched successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["cases", "fetched_at"],
+              "properties": {
+                "fetched_at": { "type": "string", "format": "date-time" },
+                "cases": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "name": { "type": "string" },
+                      "status": { "type": "string" },
+                      "priority": { "type": "string" },
+                      "team": { "type": "string" },
+                      "assignees": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string" },
+                            "email": { "type": "string" }
+                          }
+                        }
+                      },
+                      "tags": { "type": "array", "items": { "type": "string" } },
+                      "opened_at": { "type": ["string", "null"] },
+                      "created_at": { "type": ["string", "null"] },
+                      "resolved_at": { "type": ["string", "null"] },
+                      "url": { "type": ["string", "null"] }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "502": { "description": "Upstream Tines API error" }
+    }
+  }
+}
