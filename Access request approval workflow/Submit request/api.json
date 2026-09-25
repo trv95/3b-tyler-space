@@ -1,7 +1,7 @@
 {
   "post": {
     "summary": "Submit an access request",
-    "description": "Creates a Tines case documenting the request and posts an interactive approval message to Slack.",
+    "description": "Normalizes the form submission and forwards it to Process request, which creates a Tines case and posts an interactive Slack approval message. Returns the created case.",
     "requestBody": {
       "required": true,
       "content": {

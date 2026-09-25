@@ -1,0 +1,6 @@
+color = "teal"
+route = "/access-request-slash"
+route_auth = "external_id:9OBzLTNTvZ2ERwOCTudLo"
+route_type = "webhook"
+links = ["Process request"]
+timeout = 30

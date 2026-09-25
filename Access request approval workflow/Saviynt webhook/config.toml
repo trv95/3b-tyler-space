@@ -1,0 +1,6 @@
+color = "orange"
+route = "/access-request-saviynt"
+route_auth = "external_id:cjMYp0gZCU083ZjPI_wLU"
+route_type = "webhook"
+links = ["Process request"]
+timeout = 30

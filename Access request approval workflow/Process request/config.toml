@@ -1,0 +1,4 @@
+color = "sky"
+output = true
+connectors = [{ name = "tyler-tines-stories", type = "tines" }, { name = "tyler-slack", type = "slack" }]
+timeout = 60
