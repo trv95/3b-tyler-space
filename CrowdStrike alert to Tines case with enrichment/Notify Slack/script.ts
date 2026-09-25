@@ -10,6 +10,12 @@ if (!c?.url) {
 
 const priority = String(c.priority ?? draft.priority ?? "unknown").toUpperCase();
 
+if (c.deduplicated) {
+  console.error(`Case ${c.case_id} was already announced for this alert; not re-posting.`);
+  console.log(JSON.stringify({ case_id: c.case_id, case_url: c.url, skipped: "duplicate_alert", channel: CHANNEL }));
+  process.exit(0);
+}
+
 const blocks = [
   {
     type: "header",

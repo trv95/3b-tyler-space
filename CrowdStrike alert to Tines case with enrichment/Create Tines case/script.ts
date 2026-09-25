@@ -10,6 +10,24 @@ if (!draft) {
   process.exit(1);
 }
 
+// One case per CrowdStrike alert: a re-run of the same alert must not open a second case
+// or re-announce it in Slack.
+const STATE_DIR = "/storage/crowdstrike-cases";
+const compositeId: string | undefined = payload.alert?.composite_id;
+const stateFile = compositeId
+  ? `${STATE_DIR}/${compositeId.replace(/[^A-Za-z0-9._-]/g, "_")}.json`
+  : undefined;
+
+if (stateFile) {
+  const existing = Bun.file(stateFile);
+  if (await existing.exists()) {
+    const record = await existing.json();
+    console.error(`Alert ${compositeId} already has case ${record.case_id} — skipping creation.`);
+    console.log(JSON.stringify({ ...payload, tines_case: { ...record, deduplicated: true } }));
+    process.exit(0);
+  }
+}
+
 // The connector's TINES_URL is stored with a duplicated scheme and a "www." prefix that
 // doesn't resolve, so derive candidate hosts rather than trusting the value verbatim.
 function candidateBases(): string[] {
@@ -146,15 +164,16 @@ if (!hash) {
   console.error("Alert carried no file hash — the Hunt Hash action will report that.");
 }
 
-console.log(
-  JSON.stringify({
-    ...payload,
-    tines_case: {
-      case_id: caseId,
-      url: created.url,
-      name: created.name,
-      priority: created.priority,
-      actions: createdActions,
-    },
-  }),
-);
+const caseRecord = {
+  case_id: caseId,
+  url: created.url,
+  name: created.name,
+  priority: created.priority,
+  actions: createdActions,
+};
+
+if (stateFile) {
+  await Bun.write(stateFile, JSON.stringify({ ...caseRecord, composite_id: compositeId, created_at: new Date().toISOString() }));
+}
+
+console.log(JSON.stringify({ ...payload, tines_case: caseRecord }));

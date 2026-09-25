@@ -18,4 +18,6 @@ RUN \
   if [ -f package.json ]; then ./bun install; fi && \
   mkdir -p node_modules
 
+VOLUME ["crowdstrike-cases:concurrency=exclusive"]
+
 CMD ./bun ./script.ts

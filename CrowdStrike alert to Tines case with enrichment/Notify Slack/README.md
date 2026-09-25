@@ -4,4 +4,6 @@ Posts a Block Kit message to `#3b-demo` via `POST https://slack.com/api/chat.pos
 
 This step sends a real message. The channel is the `CHANNEL` constant at the top of [script.ts](script.ts); the bot must be a member of it.
 
+When the upstream case carries `deduplicated: true` — the alert already had a case — nothing is posted and the output is `{ case_id, case_url, skipped: "duplicate_alert", channel }`.
+
 Output: `{ case_id, case_url, slack_ts, channel }`.

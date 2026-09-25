@@ -23,7 +23,7 @@ Each step appends to a single JSON payload that accumulates `alert`, `host`, `ip
 
 **External services.** CrowdStrike Falcon (alerts and devices APIs), VirusTotal (IP reputation), Anthropic (Claude, for the write-up), Tines (case and notes APIs, team **AD Case Management**), Slack (`#3b-demo`).
 
-**Side effects.** Read-only up to and including the AI step. [Create Tines case](<Create Tines case/README.md>) opens a real case with two notes and two case actions, and [Notify Slack](<Notify Slack/README.md>) posts a real message. There is no deduplication, so each run produces a new case. Clicking a case action writes a further note and removes that action.
+**Side effects.** Read-only up to and including the AI step. [Create Tines case](<Create Tines case/README.md>) opens a real case with two notes and two case actions, and [Notify Slack](<Notify Slack/README.md>) posts a real message. Cases are deduplicated by CrowdStrike `composite_id` in the `crowdstrike-cases` volume, so re-running the same alert reuses the existing case and skips the Slack post instead of opening a duplicate. Clicking a case action writes a further note and removes that action.
 
 **Operational notes.** The alert step exits non-zero when no alert matches, which stops the run cleanly. Missing IP enrichment is tolerated and reported in the case note rather than failing. The Tines connector's `TINES_URL` is currently malformed (duplicated scheme, unresolvable `www.` prefix) and [Create Tines case/script.ts](<Create Tines case/script.ts>) works around it — worth fixing at the connector.
 

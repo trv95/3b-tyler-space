@@ -1,3 +1,5 @@
+const base = (process.env.CROWD_STRIKE_URL ?? "https://api.crowdstrike.com").replace(/\/+$/, "");
+
 const raw = await Bun.stdin.text();
 let requestedId: string | undefined;
 if (raw.trim()) {
@@ -9,62 +11,88 @@ if (raw.trim()) {
   }
 }
 
-const deviceId = "9f2a1c4be7d84f0a91c6e5b3a7d21f88";
-const compositeId = requestedId ?? `${deviceId}:ind:${deviceId}:38914571029-10303-27443456`;
+async function json(response: Response, label: string) {
+  if (!response.ok) {
+    throw new Error(`${label} failed: ${response.status} ${await response.text()}`);
+  }
+  return response.json();
+}
 
-const alert = {
-  composite_id: compositeId,
-  name: "CredentialDumpingViaLsass",
-  display_name: "Credential Theft via LSASS Access",
-  description:
-    "A process read memory from lsass.exe in a manner consistent with credential dumping. This behavior is commonly used by adversaries to harvest account credentials for lateral movement.",
-  severity: 90,
-  severity_name: "High",
-  confidence: 80,
-  status: "new",
-  objective: "Falcon Detection Method",
-  tactic: "Credential Access",
-  technique: "OS Credential Dumping",
-  scenario: "credential_theft",
-  pattern_disposition_description: "Detection, process termination blocked by policy.",
-  prevention_policy_name: "Corporate Workstations - Phase 2",
-  created_timestamp: "2026-09-09T18:41:12.482Z",
-  context_timestamp: "2026-09-09T18:41:09.104Z",
-  falcon_host_link: `https://falcon.us-2.crowdstrike.com/activity-v2/detections/${compositeId}`,
-  filename: "rundll32.exe",
-  filepath: "\\Device\\HarddiskVolume3\\Windows\\System32\\rundll32.exe",
-  cmdline:
-    "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump 728 C:\\Users\\Public\\tmp\\lsass.dmp full",
-  sha256: "b8f2c1a90d6e4471a5c3f27de81b4a6c9e0d5378f41b26ca9d7e3f5081ac64b2",
-  md5: "3a7f1d92c04b5e6789ab12cd34ef5601",
-  user_name: "j.alvarez",
-  logon_domain: "CORP",
-  parent_process: {
-    filename: "powershell.exe",
-    cmdline: "powershell.exe -NoProfile -EncodedCommand JABlAD0AJwBoAHQAdABwADoALwAvADEAOAA1AC4A",
-    sha256: "d4c9e7b31f8a4526bd07e91c2a53f0687d1b94ac35e8f620c7a9d4b18e30f5c7",
-    user_name: "j.alvarez",
-  },
-  mitre_attack: [
-    {
-      tactic: "Credential Access",
-      tactic_id: "TA0006",
-      technique: "OS Credential Dumping",
-      technique_id: "T1003",
-    },
-    {
-      tactic: "Credential Access",
-      tactic_id: "TA0006",
-      technique: "LSASS Memory",
-      technique_id: "T1003.001",
-    },
-  ],
-  global_prevalence: "low",
-  local_prevalence: "unique",
-  remote_addresses: ["185.220.101.47", "45.133.1.238"],
-  dns_requests: ["cdn-update-check.top", "pastebin.com"],
+let compositeId = requestedId;
+if (!compositeId) {
+  const url = new URL(`${base}/alerts/queries/alerts/v2`);
+  url.searchParams.set("limit", "1");
+  url.searchParams.set("sort", "created_timestamp.desc");
+  url.searchParams.set("filter", `product:'epp'+status:'new'`);
+  const query = await json(await fetch(url), "Alert query");
+  compositeId = query?.resources?.[0];
+}
+
+if (!compositeId) {
+  console.error("No matching CrowdStrike alerts found.");
+  process.exit(1);
+}
+
+const detail = await json(
+  await fetch(`${base}/alerts/entities/alerts/v2`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ composite_ids: [compositeId] }),
+  }),
+  "Alert detail",
+);
+
+const alert = detail?.resources?.[0];
+if (!alert) {
+  console.error(`CrowdStrike returned no detail for ${compositeId}`);
+  process.exit(1);
+}
+
+const deviceId = alert.device?.device_id ?? alert.agent_id;
+console.error(`Alert ${compositeId} on device ${deviceId ?? "unknown"}`);
+
+const summary = {
+  composite_id: alert.composite_id,
+  name: alert.name,
+  display_name: alert.display_name,
+  description: alert.description,
+  severity: alert.severity,
+  severity_name: alert.severity_name,
+  confidence: alert.confidence,
+  status: alert.status,
+  objective: alert.objective,
+  tactic: alert.tactic,
+  technique: alert.technique,
+  scenario: alert.scenario,
+  pattern_disposition_description: alert.pattern_disposition_description,
+  prevention_policy_name: alert.prevention_policy_name,
+  created_timestamp: alert.created_timestamp,
+  context_timestamp: alert.context_timestamp,
+  falcon_host_link: alert.falcon_host_link,
+  filename: alert.filename,
+  filepath: alert.filepath,
+  cmdline: alert.cmdline,
+  sha256: alert.sha256,
+  md5: alert.md5,
+  user_name: alert.user_name,
+  logon_domain: alert.logon_domain,
+  parent_process: alert.parent_details
+    ? {
+        filename: alert.parent_details.filename,
+        cmdline: alert.parent_details.cmdline,
+        sha256: alert.parent_details.sha256,
+        user_name: alert.parent_details.user_name,
+      }
+    : undefined,
+  mitre_attack: alert.mitre_attack,
+  global_prevalence: alert.global_prevalence,
+  local_prevalence: alert.local_prevalence,
+  remote_addresses: [
+    ...new Set((alert.network_accesses ?? []).map((a: any) => a.remote_address).filter(Boolean)),
+  ].slice(0, 15),
+  dns_requests: [
+    ...new Set((alert.dns_requests ?? []).map((d: any) => d.domain_name).filter(Boolean)),
+  ].slice(0, 15),
 };
 
-console.error(`Sample alert ${compositeId} on device ${deviceId}`);
-
-console.log(JSON.stringify({ alert, device_id: deviceId }));
+console.log(JSON.stringify({ alert: summary, device_id: deviceId }));
