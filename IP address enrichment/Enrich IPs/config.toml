@@ -1,0 +1,2 @@
+color = "purple"
+apps = [{ name = "virustotal-rami-tyan-test", type = "virusTotal" }]
