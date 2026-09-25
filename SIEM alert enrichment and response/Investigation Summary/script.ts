@@ -1,7 +1,7 @@
 // Uses Claude to produce an analyst-ready investigative summary.
 const data = JSON.parse(await Bun.stdin.text());
 
-const prompt = `You are a SOC analyst. Write a concise, investigative summary of the following SIEM alert and its enrichment. Use markdown with these sections: "What happened", "Why it matters", "Key indicators" (bullet list), and "Recommended next steps" (numbered). Be specific and reference the VirusTotal verdict and any related Databricks log activity. Keep it under 250 words.
+const prompt = `You are a SOC analyst. Write a concise, investigative summary of the following SIEM alert and its enrichment. Use markdown with these sections: "What happened", "Why it matters", "Key indicators" (bullet list), and "Recommended next steps" (numbered). Be specific and reference the VirusTotal verdict, urlscan.io scan activity, and any related Databricks log activity. Keep it under 250 words.
 
 DATA:
 ${JSON.stringify(data, null, 2)}`;
