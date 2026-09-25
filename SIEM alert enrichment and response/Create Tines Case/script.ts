@@ -5,7 +5,17 @@ const vt = data.virustotal ?? {};
 const logs = data.databricks ?? {};
 
 // Base host is provided by the Tines connector via TINES_URL.
-const base = (process.env.TINES_URL || "").replace(/\/$/, "").replace("://www.", "://");
+// TINES_URL can arrive with a duplicated scheme and/or a www. prefix, so normalize to a bare host.
+const host = (process.env.TINES_URL || "")
+  .trim()
+  .replace(/\/+$/, "")
+  .replace(/^(?:https?:\/*)+/i, "")
+  .replace(/^www\./i, "");
+if (!host) {
+  console.error("TINES_URL is not set — attach the Tines connector to this step.");
+  process.exit(1);
+}
+const base = `https://${host}`;
 
 const jsonHeaders = { "content-type": "application/json", accept: "application/json" };
 
