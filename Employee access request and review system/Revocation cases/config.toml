@@ -1,0 +1,4 @@
+color = "red"
+links = ["Audit report"]
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 300

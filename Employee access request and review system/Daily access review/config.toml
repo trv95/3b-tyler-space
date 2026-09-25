@@ -1,0 +1,4 @@
+color = "orange"
+cron = "0 13 * * *"
+connectors = [{ name = "tyler-slack", type = "slack" }]
+timeout = 300

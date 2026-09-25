@@ -1,0 +1,7 @@
+color = "green"
+output = true
+route = "/portal"
+route_auth = "space"
+route_type = "webpage"
+title = "Employee access portal"
+pinned = true

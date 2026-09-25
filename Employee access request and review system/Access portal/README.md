@@ -1,0 +1,1 @@
+Part of the employee access request and review system. See the workflow README for the full flow and operating model. This step is triggered by its configured route, schedule, or upstream link and emits structured workflow data or an authenticated webpage. Stateful steps use the shared access_state SQLite volume; external calls use attached least-privilege connectors.

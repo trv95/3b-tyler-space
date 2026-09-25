@@ -1,0 +1,7 @@
+color = "orange"
+output = true
+route = "/review"
+route_auth = "space"
+route_type = "webpage"
+title = "Daily access review"
+pinned = true
