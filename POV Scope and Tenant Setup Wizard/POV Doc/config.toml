@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/pov-scoping"
+route_auth = "tenant"
+route_type = "webpage"
+title = "POV Scoping Doc"

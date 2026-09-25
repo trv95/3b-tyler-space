@@ -1,0 +1,6 @@
+color = "teal"
+output = true
+route = "/pov-scoping-data"
+route_auth = "tenant"
+route_type = "api"
+title = "POV data"

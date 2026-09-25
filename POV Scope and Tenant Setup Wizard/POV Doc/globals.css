@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "./*.tsx";
+
+:root {
+  --page-bg: #FCF9F5;
+  --card-bg: rgba(248, 244, 240, 0.82);
+  --border: #EDE9E3;
+  --divider: #EDE9E3;
+  --input-bg: #F6F2EE;
+  --text-primary: #362A51;
+  --text-secondary: rgba(54, 42, 81, 0.55);
+  --text-muted: rgba(54, 42, 81, 0.35);
+  --accent: #8D75E6;
+  --accent-hover: #7F69CE;
+  --accent-deep: #4D3E78;
+  --success: #25A871;
+}
+
+html, body {
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 14px;
+}
+
+input, textarea, select { font-family: inherit; }
+
+::placeholder { color: var(--text-muted); }

@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/tenant-setup-docs"
+route_auth = "space"
+route_type = "webpage"
+title = "Tenant setup documentation index"

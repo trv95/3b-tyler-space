@@ -1,0 +1,11 @@
+{
+  "get": {
+    "summary": "Fetch the POV scoping document",
+    "responses": {
+      "200": {
+        "description": "The saved document, or {\"initialized\": false} if none exists",
+        "content": { "application/json": { "schema": { "type": "object", "additionalProperties": true } } }
+      }
+    }
+  }
+}

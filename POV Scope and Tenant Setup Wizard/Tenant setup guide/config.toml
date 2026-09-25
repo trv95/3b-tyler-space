@@ -1,0 +1,6 @@
+color = "teal"
+output = true
+route = "/tenant-setup"
+route_auth = "space"
+route_type = "webpage"
+title = "Tenant setup guide"

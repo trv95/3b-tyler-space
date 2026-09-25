@@ -1,0 +1,6 @@
+color = "orange"
+output = true
+route = "/tenant-setup-requests"
+route_auth = "space"
+route_type = "webpage"
+title = "SE help requests"

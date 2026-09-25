@@ -1,0 +1,86 @@
+{
+  "post": {
+    "summary": "Create, update, withdraw, or change the status of a Solutions Engineer help request",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["upsert", "add", "status", "remove"],
+                "description": "Defaults to \"upsert\" (or \"remove\" when the legacy remove flag is true). \"add\" creates a manual request, \"status\" marks one outstanding or done."
+              },
+              "step": {
+                "type": "string",
+                "description": "Request key — a guide page slug such as \"sso\", or the generated manual:<uuid> key. Required for upsert, status and remove."
+              },
+              "title": {
+                "type": "string",
+                "description": "Human-readable title. Required for upsert and add."
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 4000,
+                "description": "Optional detail."
+              },
+              "status": {
+                "type": "string",
+                "enum": ["outstanding", "done"],
+                "description": "Used with action \"status\", and optionally with \"add\". Defaults to outstanding."
+              },
+              "remove": {
+                "type": "boolean",
+                "description": "Legacy flag equivalent to action \"remove\"."
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Change applied",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["ok", "outstanding"],
+              "properties": {
+                "ok": { "type": "boolean" },
+                "outstanding": {
+                  "type": "integer",
+                  "description": "Requests still outstanding after this change."
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Missing step or title",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "error": { "type": "string" } }
+            }
+          }
+        }
+      },
+      "405": {
+        "description": "Method other than POST",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "error": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

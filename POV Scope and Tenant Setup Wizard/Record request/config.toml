@@ -1,0 +1,6 @@
+color = "purple"
+output = true
+route = "/tenant-setup-request"
+route_auth = "space"
+route_type = "api"
+title = "Record SE help request"

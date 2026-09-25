@@ -1,0 +1,15 @@
+{
+  "post": {
+    "summary": "Save the POV scoping document",
+    "requestBody": {
+      "required": true,
+      "content": { "application/json": { "schema": { "type": "object", "additionalProperties": true } } }
+    },
+    "responses": {
+      "200": {
+        "description": "Saved",
+        "content": { "application/json": { "schema": { "type": "object", "properties": { "ok": { "type": "boolean" }, "updatedAt": { "type": "string" } } } } }
+      }
+    }
+  }
+}

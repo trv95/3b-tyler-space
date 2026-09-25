@@ -1,0 +1,6 @@
+color = "orange"
+output = true
+route = "/pov-scoping-save"
+route_auth = "tenant"
+route_type = "api"
+title = "Save POV data"

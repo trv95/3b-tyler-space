@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "./*.tsx";
+
+:root {
+  --page-bg: #fcf9f5;
+  --card-bg: rgba(248, 244, 240, 0.82);
+  --border: #ede9e3;
+  --divider: #ede9e3;
+  --input-bg: #f6f2ee;
+  --text-primary: #362a51;
+  --text-secondary: rgba(54, 42, 81, 0.55);
+  --text-muted: rgba(54, 42, 81, 0.35);
+  --accent: #8d75e6;
+  --accent-hover: #7f69ce;
+  --accent-deep: #4d3e78;
+  --purple50: #f3ecf7;
+  --purple100: #eadff8;
+  --purple200: #d7c4fa;
+  --green500: #25a871;
+  --teal500: #04b9ad;
+
+  font-family: "Roobert", system-ui, sans-serif;
+}
+
+html,
+body {
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: "Roobert", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
