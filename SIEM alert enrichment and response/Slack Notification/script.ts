@@ -4,7 +4,7 @@ const alert = data.alert ?? {};
 const vt = data.virustotal ?? {};
 const caseLink = data.case?.link;
 
-const channel = process.env.SLACK_CHANNEL || "#security-alerts";
+const channel = process.env.SLACK_CHANNEL || "#3b-notifications";
 
 const text = `:rotating_light: *${alert.severity ?? "ALERT"}* — ${alert.title ?? "SIEM alert"}`;
 
