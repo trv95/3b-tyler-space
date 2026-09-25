@@ -1,0 +1,9 @@
+color = "green"
+output = true
+route = "/decision"
+route_auth = "space"
+route_type = "webpage"
+title = "Access approval decision"
+links = ["Audit report"]
+connectors = [{ name = "tyler-slack", type = "slack" }]
+timeout = 60

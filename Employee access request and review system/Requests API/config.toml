@@ -1,0 +1,8 @@
+color = "purple"
+output = true
+route = "/api/requests"
+route_auth = "space"
+route_type = "api"
+title = "Access requests API"
+connectors = [{ name = "bamboohr-se-demo", type = "bambooHr" }, { name = "tyler-slack", type = "slack" }]
+timeout = 120

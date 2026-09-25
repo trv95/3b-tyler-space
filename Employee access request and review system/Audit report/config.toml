@@ -1,0 +1,7 @@
+color = "teal"
+output = true
+route = "/api/report"
+route_auth = "space"
+route_type = "api"
+title = "Access audit report"
+timeout = 60

@@ -1,0 +1,8 @@
+color = "purple"
+output = true
+route = "/api/review"
+route_auth = "space"
+route_type = "api"
+title = "Access review API"
+timeout = 120
+links = ["Revocation cases"]
