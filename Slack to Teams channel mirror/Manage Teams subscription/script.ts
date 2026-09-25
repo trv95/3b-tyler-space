@@ -15,28 +15,9 @@ const db = new Database("/storage/mirror_state/mirror.sqlite");
 db.run("PRAGMA journal_mode = WAL");
 db.run("CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)");
 
-const storedId = (
+const existingId = (
   db.query("SELECT value FROM settings WHERE key = 'subscription_id'").get() as { value: string } | undefined
 )?.value;
-
-// Draft and live have separate volumes, so the stored id may be missing while a
-// subscription for this channel already exists; ask Graph before creating one.
-async function discover(): Promise<string[]> {
-  const res = await fetch(SUBSCRIPTIONS);
-  if (!res.ok) {
-    console.error(`List subscriptions failed (${res.status}): ${await res.text()}`);
-    return [];
-  }
-  const body = (await res.json()) as { value?: { id: string; resource: string; notificationUrl: string }[] };
-  return (body.value ?? [])
-    .filter((s) => s.resource === RESOURCE && s.notificationUrl === NOTIFICATION_URL)
-    .map((s) => s.id);
-}
-
-async function remove(id: string): Promise<void> {
-  const res = await fetch(`${SUBSCRIPTIONS}/${id}`, { method: "DELETE" });
-  console.error(res.ok ? `Deleted duplicate subscription ${id}` : `Delete ${id} failed (${res.status})`);
-}
 
 async function renew(id: string): Promise<boolean> {
   const res = await fetch(`${SUBSCRIPTIONS}/${id}`, {
@@ -73,24 +54,13 @@ async function create(): Promise<void> {
   console.error(`Created subscription ${sub.id}`);
 }
 
-const discovered = await discover();
-const candidates = storedId && discovered.includes(storedId)
-  ? [storedId, ...discovered.filter((id) => id !== storedId)]
-  : discovered;
-
-let active: string | null = null;
-for (const id of candidates) {
-  if (active === null) {
-    if (await renew(id)) active = id;
-  } else {
-    await remove(id);
+if (existingId) {
+  if (!(await renew(existingId))) {
+    db.run("DELETE FROM settings WHERE key = 'subscription_id'");
+    await create();
   }
-}
-
-if (active === null) {
-  await create();
 } else {
-  db.run("INSERT OR REPLACE INTO settings (key, value) VALUES ('subscription_id', ?)", [active]);
+  await create();
 }
 
 db.close();

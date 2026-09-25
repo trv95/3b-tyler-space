@@ -11,8 +11,15 @@ const body = raw.startsWith("HTTP/")
   : raw.trim();
 if (!body) process.exit(0);
 
-const payload = JSON.parse(body) as { messages: { resource: string }[] };
-const resources = payload.messages ?? [];
+// Graph validation/lifecycle handshakes make the upstream step echo plain text, not JSON.
+let payload: { messages?: { resource: string }[] };
+try {
+  payload = JSON.parse(body);
+} catch {
+  process.exit(0);
+}
+
+const resources = Array.isArray(payload?.messages) ? payload.messages : [];
 if (resources.length === 0) process.exit(0);
 
 const db = new Database("/storage/mirror_state/mirror.sqlite");
