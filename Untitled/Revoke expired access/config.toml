@@ -1,0 +1,4 @@
+color = "orange"
+cron = "* * * * *"
+timeout = 120
+apps = [{ name = "tyler-tines-stories", type = "tines" }]

@@ -1,0 +1,7 @@
+color = "green"
+output = true
+route = "/access-decision"
+route_auth = "external_id:pWQI4FoAsbA0pKLsmDUcF"
+route_type = "other"
+apps = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 120

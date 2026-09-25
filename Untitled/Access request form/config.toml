@@ -1,0 +1,6 @@
+color = "purple"
+route = "/temporary-access"
+route_type = "webpage"
+output = true
+timeout = 60
+apps = [{ name = "tyler-tines-stories", type = "tines" }]
