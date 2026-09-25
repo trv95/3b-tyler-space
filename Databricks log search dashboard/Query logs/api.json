@@ -1,0 +1,60 @@
+{
+  "post": {
+    "summary": "Search OCSF audit logs and return matching rows plus an hourly volume series",
+    "requestBody": {
+      "required": false,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "q": { "type": "string", "description": "Case-insensitive search across activity, class, actor email/name, product" },
+              "from": { "type": "integer", "description": "Start time, epoch ms" },
+              "to": { "type": "integer", "description": "End time, epoch ms" },
+              "limit": { "type": "integer", "default": 500, "minimum": 1, "maximum": 2000 }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Matching log rows and hourly volume series",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "rows": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "time": { "type": "integer" },
+                      "class_name": { "type": "string" },
+                      "activity_name": { "type": "string" },
+                      "email": { "type": "string" },
+                      "name": { "type": "string" },
+                      "product": { "type": "string" }
+                    }
+                  }
+                },
+                "series": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "bucket": { "type": "integer" },
+                      "count": { "type": "integer" }
+                    }
+                  }
+                },
+                "total": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+color = "orange"
+output = true
+route = "/log-search"
+route_auth = "space"
+route_type = "webpage"

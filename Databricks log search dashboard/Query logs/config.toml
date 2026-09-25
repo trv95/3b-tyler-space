@@ -1,0 +1,6 @@
+color = "orange"
+output = true
+route = "/log-search-query"
+route_auth = "space"
+route_type = "api"
+apps = [{ name = "databricks-workspace", type = "databricksWorkspace" }]
