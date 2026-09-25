@@ -15,7 +15,11 @@ connector. It follows `meta.next_page_number` until the last page.
 The connector's `TINES_URL` value is not a reliable origin (it currently carries a duplicated
 scheme and a `www.` host that does not resolve), so [script.ts](script.ts) strips any schemes,
 tries the host with and without `www.`, and uses whichever answers. Fixing the connector's URL to
-a clean `https://<tenant>.tines.com` makes the first probe succeed immediately.
+a clean `https://<tenant>.tines.com` removes malformed URL handling, but does not fix network connectivity.
+Probes and page requests retry transient failures up to four times, with a 15-second timeout per
+request. Errors include the upstream diagnostic. If both hosts report `tunnel error: unsuccessful`,
+check the platform's outbound network/tunnel connectivity to the tenant; URL normalization alone
+cannot resolve that failure. A refresh remains failed and preserves the previous cache.
 
 **Derived fields**
 

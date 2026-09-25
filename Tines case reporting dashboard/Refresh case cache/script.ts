@@ -20,11 +20,9 @@ async function resolveBase(): Promise<string> {
   for (const candidate of candidates) {
     const base = `https://${candidate}`;
     try {
-      const res = await fetch(`${base}/api/v2/cases?per_page=1`, {
-        headers: { "content-type": "application/json" },
-      });
-      if (res.ok) return base;
-      failures.push(`${base} -> HTTP ${res.status}`);
+      const res = await getWithRetry(`${base}/api/v2/cases?per_page=1`);
+      await res.body?.cancel();
+      return base;
     } catch (err) {
       failures.push(`${base} -> ${err instanceof Error ? err.message : String(err)}`);
     }
@@ -37,12 +35,15 @@ async function getWithRetry(url: string): Promise<Response> {
   for (let attempt = 0; attempt < 4; attempt++) {
     if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * 2 ** attempt));
     try {
-      const res = await fetch(url, { headers: { "content-type": "application/json" } });
+      const res = await fetch(url, {
+        headers: { "content-type": "application/json" },
+        signal: AbortSignal.timeout(15000),
+      });
       if (res.ok) return res;
       if (res.status < 500 && res.status !== 429) {
         throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
       }
-      lastError = `HTTP ${res.status}`;
+      lastError = `HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`;
     } catch (err) {
       lastError = err instanceof Error ? err.message : String(err);
       if (lastError.startsWith("HTTP 4")) throw err;
