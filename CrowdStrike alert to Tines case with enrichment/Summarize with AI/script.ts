@@ -24,10 +24,10 @@ ${JSON.stringify(payload, null, 2)}
 
 Produce:
 - case_name: short, specific title, e.g. "High severity ML detection on DESKTOP-BA0J59I".
-- priority: map CrowdStrike severity and VirusTotal findings to critical/high/medium/low/info.
+- priority: map CrowdStrike severity and the VirusTotal and urlscan.io findings to critical/high/medium/low/info.
 - description: markdown for the case description. Include a one-paragraph analyst summary, a "Detection details" bullet list (severity, tactic/technique, process, user, timestamps), an "Assessment" paragraph covering whether this looks like real malicious activity or benign/testing activity and why, and a "Recommended next steps" numbered list. Include the Falcon console link as a markdown link. Do not include the host or IP tables — those go in notes.
 - host_note: markdown for a note titled "Host details" — a compact markdown table of the relevant host fields, then one line of context (criticality, containment status, patch/agent posture).
-- ip_note: markdown for a note titled "IP enrichment" — the external IP, VirusTotal verdict counts, ASN/owner/country, a link to the VirusTotal report, and a one-line verdict. If enrichment is missing, say so plainly.
+- ip_note: markdown for a note titled "IP enrichment" — the external IP, VirusTotal verdict counts, ASN/owner/country, a link to the VirusTotal report, then a short urlscan.io section from urlscan_enrichment (total scans seen on the IP, notable domains hosted there, how many scans were judged malicious, and the urlscan search link), and a one-line combined verdict. If either enrichment is missing or empty, say so plainly.
 - slack_summary: 2-3 sentences, plain text, no markdown headings, suitable for a Slack alert.
 
 Be concrete and cite values from the evidence. Do not invent data that is not present.`;

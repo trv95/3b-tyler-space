@@ -1,4 +1,4 @@
 color = "purple"
-links = ["Summarize with AI"]
+links = ["Enrich IP with urlscan"]
 connectors = [{ name = "weindorf-virustotal", type = "virusTotal" }]
 timeout = 60
