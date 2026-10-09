@@ -1,0 +1,4 @@
+color = "orange"
+cron = "0 14 * * *"
+links = ["Create Tines cases"]
+timeout = 60

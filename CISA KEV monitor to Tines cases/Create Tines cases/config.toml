@@ -1,0 +1,3 @@
+color = "sky"
+connectors = [{ name = "tyler-tines-stories", type = "tines" }]
+timeout = 180
