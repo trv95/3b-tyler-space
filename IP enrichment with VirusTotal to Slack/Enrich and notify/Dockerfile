@@ -13,6 +13,7 @@ RUN \
   ./bun --version >/dev/null
 
 VOLUME ["ip-enrichment-history"]
+VOLUME ["audit:concurrency=exclusive"]
 
 COPY package.json .
 RUN \

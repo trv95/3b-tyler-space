@@ -5,6 +5,7 @@ type Result = {
   network: string | null; asOwner: string | null;
   analysis: { malicious: number; suspicious: number; harmless: number; undetected: number };
   reportUrl: string; slack: { channel: string; timestamp: string };
+  abuseipdb?: { abuseConfidenceScore: number; totalReports: number; lastReportedAt: string | null; usageType: string | null; domain: string | null; isTor: boolean; reportUrl: string };
 };
 
 function route(path: string) {
@@ -54,7 +55,7 @@ export default function App() {
     <div className="relative mx-auto max-w-7xl px-5 py-8 lg:px-10">
       <header className="flex items-center justify-between border-b border-slate-800 pb-5">
         <div className="flex items-center gap-3"><span className="h-2.5 w-2.5 rounded-full bg-lime-300 shadow-[0_0_18px_rgba(190,242,100,.8)]"/><span className="font-mono text-xs uppercase tracking-[0.28em] text-slate-400">Threat intelligence / IP</span></div>
-        <span className="font-mono text-xs text-slate-500">VT → SLACK → LEDGER</span>
+        <span className="font-mono text-xs text-slate-500">VT + ABUSEIPDB → SLACK → LEDGER</span>
       </header>
 
       <div className="grid gap-10 py-12 lg:grid-cols-[.72fr_1.28fr]">
@@ -62,7 +63,7 @@ export default function App() {
           <section className="mb-8">
             <p className="mb-4 font-mono text-xs uppercase tracking-[0.25em] text-lime-300">Reputation check</p>
             <h1 className="max-w-xl font-serif text-5xl leading-[1.02] tracking-tight sm:text-6xl">Turn an address into <span className="italic text-slate-400">context.</span></h1>
-            <p className="mt-5 max-w-lg leading-7 text-slate-400">Query VirusTotal, notify <span className="text-slate-200">#3b-demo</span>, and retain the determination for future analysis.</p>
+            <p className="mt-5 max-w-lg leading-7 text-slate-400">Query VirusTotal and AbuseIPDB, notify <span className="text-slate-200">#3b-demo</span>, and retain the combined determination for future analysis.</p>
           </section>
 
           <section className="border border-slate-700 bg-slate-900/80 p-6 shadow-2xl backdrop-blur">
@@ -87,7 +88,7 @@ export default function App() {
             {history.map((item, index) => <article key={item.id || `${item.ip}-${item.enrichedAt}-${index}`} className="group grid gap-4 p-5 transition hover:bg-slate-800/35 sm:grid-cols-[1.1fr_.8fr_.7fr_auto] sm:items-center">
               <div><a href={item.reportUrl} target="_blank" rel="noreferrer" className="font-mono text-base text-slate-100 underline-offset-4 group-hover:text-lime-300 group-hover:underline">{item.ip}</a><p className="mt-1 truncate text-xs text-slate-500">{item.asOwner || item.network || "No network context"}</p></div>
               <div><p className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Determination</p><span className={`mt-1 inline-block border px-2 py-1 font-mono text-[10px] uppercase ${badge(item.verdict)}`}>{item.verdict}</span></div>
-              <div className="font-mono text-xs text-slate-400"><span className="text-red-300">{item.analysis.malicious}M</span><span className="mx-2 text-slate-700">/</span><span className="text-amber-200">{item.analysis.suspicious}S</span><p className="mt-1 text-[10px] text-slate-600">{item.country || "Unknown country"}</p></div>
+              <div className="font-mono text-xs text-slate-400"><span className="text-red-300">{item.analysis.malicious}M</span><span className="mx-2 text-slate-700">/</span><span className="text-amber-200">{item.analysis.suspicious}S</span><p className="mt-1 text-[10px] text-slate-500">Abuse {item.abuseipdb ? `${item.abuseipdb.abuseConfidenceScore}% · ${item.abuseipdb.totalReports} reports` : "not recorded"}</p><p className="mt-1 text-[10px] text-slate-600">{item.country || "Unknown country"}</p></div>
               <time className="font-mono text-[10px] uppercase tracking-wide text-slate-600" dateTime={item.enrichedAt}>{item.enrichedAt ? new Date(item.enrichedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "Legacy"}</time>
             </article>)}
           </div>
