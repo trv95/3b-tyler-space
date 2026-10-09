@@ -1,0 +1,23 @@
+{
+  "get": {
+    "summary": "List today’s upcoming Google Calendar meetings",
+    "responses": {
+      "200": {
+        "description": "Upcoming meetings",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "date": { "type": "string" },
+                "timeZone": { "type": "string" },
+                "meetings": { "type": "array", "items": { "type": "object" } }
+              },
+              "required": ["date", "timeZone", "meetings"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

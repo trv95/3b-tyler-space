@@ -1,0 +1,8 @@
+color = "purple"
+output = true
+route = "/calendar/slack-command"
+route_auth = "external_id:5hyGP46sO-RCu3_hzxolp"
+route_type = "webhook"
+title = "Slack /calendar command"
+connectors = [{ name = "tyler-echo-slack-app", type = "slack" }]
+timeout = 10

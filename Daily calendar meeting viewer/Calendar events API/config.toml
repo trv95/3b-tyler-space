@@ -1,0 +1,8 @@
+color = "teal"
+output = true
+route = "/calendar/events"
+route_auth = "space"
+route_type = "api"
+title = "Today’s Google Calendar meetings"
+connectors = [{ name = "google-calendar-oauth-passthrough", type = "googleCalendar" }]
+timeout = 20
